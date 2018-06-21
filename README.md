@@ -1,3 +1,1 @@
-# AILogic
-
-Artificial Intelligence App to study relevant concepts!
+Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF) using Lib3MF.
