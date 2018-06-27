@@ -1,18 +1,13 @@
-#include <Model/COM/NMR_DLLInterfaces.h>
+#include <import3MF.h>
 
+#include <string>
 #include <iostream>
-
-using namespace NMR;
 
 int main()
 {
-    DWORD majorVersion;
-    DWORD minorVersion;
-    DWORD microVersion;
+	std::string resPath(RESOURCEDIR_PATH);
 
-    lib3mf_getinterfaceversion( &majorVersion, &minorVersion, &microVersion );
-
-    std::cout << "Lib3MF Version: " << majorVersion << "." << minorVersion << "." << microVersion << '\n';
-
-    return 0;
+	E3D::Import3MF im3MF(resPath + "Cube_basematerial.3mf");
+	
+	return 0;
 }
