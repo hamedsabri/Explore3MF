@@ -6,20 +6,21 @@ if(WIN32)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
     file(GLOB GLFW_SOURCES
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_init.c
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_joystick.c
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_monitor.c
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_time.c
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_tls.c
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_window.c
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/window.c
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/context.c 
-        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/egl_context.c 
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/context.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/egl_context.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/init.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/input.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/monitor.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/osmesa_context.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/vulkan.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/wgl_context.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_init.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_joystick.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_monitor.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_thread.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_time.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/win32_window.c
+        ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/src/window.c
     )
 
     file(GLOB NATIVE_FILE_DIALOG
@@ -54,16 +55,16 @@ elseif(APPLE)
 endif()
 
 file(GLOB INCLUDES
-    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/*.h
+    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glm/*.hpp
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/ImGui/*.h
-    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/STBImage/*.h
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/NativeFileDialog/*.h
+    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/STBImage/*.h
 )
 
 file(GLOB SOURCES 
-    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/*.c
+    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/src/*.c
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/ImGui/*.cpp
     ${NATIVE_FILE_DIALOG}
     ${GLFW_SOURCES}
@@ -72,7 +73,7 @@ file(GLOB SOURCES
 add_library(thirdPartyLibs STATIC ${SOURCES} ${INCLUDES})
 
 target_include_directories(thirdPartyLibs PRIVATE include
-    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/glad
+    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/ImGui
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/NativeFileDialog

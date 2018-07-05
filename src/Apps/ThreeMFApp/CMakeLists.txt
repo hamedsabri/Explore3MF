@@ -8,7 +8,7 @@ target_include_directories( ${PROJECTNAME} PRIVATE include
 
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Lib3mf
 
-    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/glad
+    ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glm
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/ImGui
@@ -24,7 +24,7 @@ elseif(APPLE)
 endif()
 
 set ( THREEMFAPP_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFAPP )
-set ( RESOURCE_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFAPP/Resources/3MF )
+set ( RESOURCE_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFAPP/Resources )
 
 include_directories(
     ${THREEMFAPP_DIR_PATH}
