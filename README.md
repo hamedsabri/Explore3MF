@@ -1,1 +1,1 @@
-Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF) using Lib3MF.
+Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF) + Lib3MF library.
