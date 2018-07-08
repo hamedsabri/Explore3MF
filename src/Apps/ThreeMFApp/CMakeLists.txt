@@ -25,9 +25,11 @@ endif()
 
 set ( THREEMFAPP_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFAPP )
 set ( RESOURCE_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFAPP/Resources )
+set ( CORE_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFAPP/Core )
 
 include_directories(
     ${THREEMFAPP_DIR_PATH}
+    ${CORE_DIR_PATH}
 )
 
 add_definitions(-DRESOURCEDIR_PATH="${RESOURCE_DIR_PATH}/")
