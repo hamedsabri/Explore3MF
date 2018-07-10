@@ -1,8 +1,6 @@
 #ifndef IMPORT_3MF_H
 #define IMPORT_3MF_H
 
-#include <Model/COM/NMR_DLLInterfaces.h>
-
 #include <string>
 
 namespace E3D
@@ -13,15 +11,14 @@ namespace E3D
 class E3D::Import3MF
 {
 public:
-    Import3MF( const std::string& );
+    Import3MF( const std::wstring& );
     ~Import3MF() = default;
 
 private:
     Import3MF( const Import3MF& ) = delete;
     Import3MF& operator=( const Import3MF& ) = delete;
 
-    HRESULT readData( const std::string& ) const;
-    HRESULT parseMeshObject( NMR::PLib3MFModelMeshObject* ) const;
+    bool readData( const std::wstring& ) const;
 };
 
 #endif //IMPORT_3MF_H

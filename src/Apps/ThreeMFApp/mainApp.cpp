@@ -1,7 +1,8 @@
 #include <mainApp.h>
 
-#include <meshLine.h>
 #include <camera.h>
+#include <import3MF.h>
+#include <meshLine.h>
 #include <shaderLoaderGL.h>
 
 #include <glm/glm.hpp>
@@ -33,6 +34,10 @@ MainApp::init()
     std::string path(RESOURCEDIR_PATH);
     m_vertexShader = std::make_shared<ShaderLoaderGL>(path + "Shaders/vertexColorShader.vert",
                                                       path + "Shaders/vertexColorShader.frag");
+
+    std::string filePath(path + "3MF/Cube_basematerial.3mf");
+    std::wstring pathWStr(filePath.begin(), filePath.end());
+    E3D::Import3MF import3MF(pathWStr);
 }
 
 void 
