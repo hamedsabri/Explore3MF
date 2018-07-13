@@ -10,6 +10,7 @@ namespace E3D
     class Camera;
     class ShaderLoaderGL;
     class MeshQuadColor;
+    class Import3MF;
 }
 
 class E3D::MainApp : public WindowGL
@@ -30,6 +31,8 @@ private:
 private:
     std::shared_ptr<Camera> m_camera;
     std::shared_ptr<ShaderLoaderGL> m_vertexShader;
+
+    std::unique_ptr<Import3MF> m_model3MF;
 };
 
 #endif //MAIN_APP_H

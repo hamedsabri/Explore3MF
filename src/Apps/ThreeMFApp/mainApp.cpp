@@ -2,6 +2,7 @@
 
 #include <camera.h>
 #include <import3MF.h>
+#include <meshModel.h>
 #include <meshLine.h>
 #include <shaderLoaderGL.h>
 
@@ -11,7 +12,7 @@ using namespace E3D;
 
 namespace
 {
-    glm::vec4 kBackgroundColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glm::vec4 kBackgroundColor(0.9f, 0.9f, 0.9f, 1.0f);
 
     float kWorldAxisLenght(0.5f);
 }
@@ -27,7 +28,7 @@ MainApp::~MainApp()
 void
 MainApp::init()
 {
-    m_camera = std::make_shared<Camera>( glm::vec3(0.0f, 4.0f, 4.0f), 
+    m_camera = std::make_shared<Camera>( glm::vec3(0.0f, 8.0f, 17.0f),
                                          glm::vec3(0.0f, 0.0f, 0.0f), 
                                          width(), height());
 
@@ -35,9 +36,10 @@ MainApp::init()
     m_vertexShader = std::make_shared<ShaderLoaderGL>(path + "Shaders/vertexColorShader.vert",
                                                       path + "Shaders/vertexColorShader.frag");
 
-    std::string filePath(path + "3MF/Cube_basematerial.3mf");
+    std::string filePath(path + "3MF/rocket.3mf");
     std::wstring pathWStr(filePath.begin(), filePath.end());
-    E3D::Import3MF import3MF(pathWStr);
+    m_model3MF = std::make_unique<Import3MF>(pathWStr);
+    assert(m_model3MF);
 }
 
 void 
@@ -57,6 +59,11 @@ MainApp::draw()
     glEnable(GL_DEPTH_TEST);
 
     worldAxisDraw(m_camera, m_vertexShader);
+
+    for (auto mesh : m_model3MF->meshModels())
+    {
+        mesh->draw(m_camera, m_vertexShader);
+    }
 }
 
 void

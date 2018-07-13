@@ -2,6 +2,7 @@
 #define MESH_DATA_H
 
 #include <glm/glm.hpp>
+#include <vector>
 
 namespace E3D
 {
@@ -19,6 +20,12 @@ namespace E3D
         {
             color = _color;
         }
+    };
+
+    struct MeshData
+    {
+        std::vector<Vertex> vertices;
+        std::vector<uint32_t> indices;
     };
 }
 
