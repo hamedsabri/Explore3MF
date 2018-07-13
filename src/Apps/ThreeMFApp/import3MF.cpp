@@ -82,7 +82,7 @@ namespace
 
             if (pInformation->faceHasData(index))
             {
-                // incdices
+                // indices
                 auto triFace = mesh->getFace(index);
 
                 meshData.indices.push_back(triFace->m_nodeindices[0]);
