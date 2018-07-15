@@ -31,6 +31,7 @@ private:
 private:
     std::shared_ptr<Camera> m_camera;
     std::shared_ptr<ShaderLoaderGL> m_vertexShader;
+    std::shared_ptr<ShaderLoaderGL> m_facetedShader;
 
     std::unique_ptr<Import3MF> m_model3MF;
 };

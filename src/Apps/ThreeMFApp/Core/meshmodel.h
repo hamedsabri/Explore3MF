@@ -22,6 +22,9 @@ public:
 
     void draw(std::shared_ptr<Camera>&, std::shared_ptr<ShaderLoaderGL>&) override;
 
+    void setAffineTransformMatrix( const glm::mat4& ) override;
+    glm::mat4 getAffineTransformMatrix() const override;
+
     uint32_t numVertices() const;
     uint32_t numTriangles() const;
 

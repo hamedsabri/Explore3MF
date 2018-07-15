@@ -12,7 +12,7 @@ using namespace E3D;
 
 namespace
 {
-    glm::vec4 kBackgroundColor(0.9f, 0.9f, 0.9f, 1.0f);
+    glm::vec4 kBackgroundColor(0.1f, 0.1f, 0.1f, 1.0f);
 
     float kWorldAxisLenght(0.5f);
 }
@@ -28,7 +28,7 @@ MainApp::~MainApp()
 void
 MainApp::init()
 {
-    m_camera = std::make_shared<Camera>( glm::vec3(0.0f, 8.0f, 17.0f),
+    m_camera = std::make_shared<Camera>( glm::vec3(0.0f, 0.0f, 12.0f),
                                          glm::vec3(0.0f, 0.0f, 0.0f), 
                                          width(), height());
 
@@ -36,7 +36,10 @@ MainApp::init()
     m_vertexShader = std::make_shared<ShaderLoaderGL>(path + "Shaders/vertexColorShader.vert",
                                                       path + "Shaders/vertexColorShader.frag");
 
-    std::string filePath(path + "3MF/rocket.3mf");
+    m_facetedShader = std::make_shared<ShaderLoaderGL>(path + "Shaders/facetedShader.vert",
+                                                       path + "Shaders/facetedShader.frag");
+
+    std::string filePath(path + "3MF/letters.3mf");
     std::wstring pathWStr(filePath.begin(), filePath.end());
     m_model3MF = std::make_unique<Import3MF>(pathWStr);
     assert(m_model3MF);
@@ -62,7 +65,7 @@ MainApp::draw()
 
     for (auto mesh : m_model3MF->meshModels())
     {
-        mesh->draw(m_camera, m_vertexShader);
+        mesh->draw(m_camera, m_facetedShader);
     }
 }
 

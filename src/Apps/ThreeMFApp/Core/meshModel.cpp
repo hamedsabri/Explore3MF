@@ -8,7 +8,7 @@
 
 using namespace E3D;
 
-MeshModel::MeshModel( const MeshData& meshData )
+MeshModel::MeshModel( const MeshData& meshData)
         : m_meshData(meshData)
 {
    sendDataToGPU();
@@ -49,7 +49,6 @@ MeshModel::sendDataToGPU()
 void 
 MeshModel::updatMatrices(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoaderGL>& shader)
 {
-    glm::mat4 model(1.0f);
     glm::mat4 view(1.0f);
     glm::mat4 projection(1.0f);
 
@@ -57,10 +56,11 @@ MeshModel::updatMatrices(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoa
     projection = cam->projectionMatrix();
 
     // shader uniforms
-    shader->setUniform("ModelMatrix", model);
+    shader->setUniform("ModelMatrix", m_affineTransformMatrix);
     shader->setUniform("ViewMatrix", view);
     shader->setUniform("ProjectionMatrix", projection);
 }
+
 
 void
 MeshModel::draw(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoaderGL>& shader)
@@ -76,6 +76,18 @@ MeshModel::draw(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoaderGL>& s
     shader->disable();
 }
 
+void 
+MeshModel::setAffineTransformMatrix( const glm::mat4& mat )
+{
+    m_affineTransformMatrix = mat;
+}
+
+glm::mat4 
+MeshModel::getAffineTransformMatrix() const
+{
+    return m_affineTransformMatrix;
+}
+
 uint32_t
 MeshModel::numVertices() const
 {
@@ -87,3 +99,4 @@ MeshModel::numTriangles() const
 {
     return static_cast<uint32_t>(m_meshData.indices.size() / 3);
 }
+
