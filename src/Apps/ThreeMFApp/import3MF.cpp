@@ -242,7 +242,7 @@ Import3MF::readData(const std::wstring& fileName)
         object->mergeToMesh(mesh.get());
 
         // item transformation
-        glm::mat4& M = getItemTransform(model, item);
+        const glm::mat4& M = getItemTransform(model, item);
 
         saveMeshDataPerItem(model, mesh, m_meshModels, baseMaterialsMap, M);
     }
