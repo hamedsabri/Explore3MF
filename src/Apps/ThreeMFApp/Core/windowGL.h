@@ -1,6 +1,12 @@
 #ifndef WINDOW_GL_H
 #define WINDOW_GL_H
 
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
+#include <timer.h>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -19,6 +25,9 @@ public:
 
     void open(int, int, int multiSample = 4 );
 
+    virtual void guiSetup() = 0;
+    virtual void guiDraw() = 0;
+
     virtual void init() = 0;
     virtual void preDraw() = 0;
     virtual void draw() = 0;
@@ -26,6 +35,7 @@ public:
     virtual void onResize(GLFWwindow*, int, int) = 0;
 
     void setSize(int, int);
+    void setTitle(const std::string&);
 
     int width(){ return m_width; }
     int height(){ return m_height; }

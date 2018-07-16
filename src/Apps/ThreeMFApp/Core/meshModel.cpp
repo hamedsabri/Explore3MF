@@ -61,7 +61,6 @@ MeshModel::updatMatrices(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoa
     shader->setUniform("ProjectionMatrix", projection);
 }
 
-
 void
 MeshModel::draw(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoaderGL>& shader)
 {

@@ -2,19 +2,20 @@
 
 #include <camera.h>
 #include <import3MF.h>
-#include <meshModel.h>
 #include <meshLine.h>
+#include <meshModel.h>
 #include <shaderLoaderGL.h>
+#include <texture2D.h>
 
-#include <glm/glm.hpp>
+#include <nfd.h>
 
 using namespace E3D;
 
 namespace
 {
-    glm::vec4 kBackgroundColor(0.1f, 0.1f, 0.1f, 1.0f);
+    const glm::vec4 kBackgroundColor(0.1f, 0.1f, 0.1f, 1.0f);
 
-    float kWorldAxisLenght(0.5f);
+    const float kWorldAxisLenght(0.5f);
 }
 
 MainApp::MainApp()
@@ -25,10 +26,76 @@ MainApp::~MainApp()
 {
 }
 
+void 
+MainApp::guiSetup()
+{
+    // window styling
+    ImGui::StyleColorsDark();
+
+    ImGuiStyle * style = &ImGui::GetStyle();
+    style->WindowRounding = 0.0f;
+    style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
+    style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
+    style->Colors[ImGuiCol_WindowBg] = ImVec4(0.1f, 0.04f, 0.07f, 1.00f);
+    style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+    style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+}
+
+void 
+MainApp::guiDraw()
+{  
+    // menu bar
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Import")) 
+            {
+                nfdchar_t * fileName = NULL;
+                nfdresult_t result = NFD_OpenDialog("3mf, 3MF", NULL, &fileName);
+
+                if ( result == NFD_OKAY )
+                {
+                    std::string path3MfFile(fileName);
+                    std::wstring path3MfFileW(path3MfFile.begin(), path3MfFile.end());
+                    m_model3MF = std::make_unique<Import3MF>(path3MfFileW);
+                }
+            }
+
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+    }
+
+    // debug window
+    if (m_model3MF)
+    {
+        ImGui::Begin("Mesh Debug", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+
+        if (m_model3MF->packageIcon())
+        {
+            uintptr_t pID = static_cast<uintptr_t>(m_model3MF->packageIcon()->id());
+            ImTextureID * textureID = reinterpret_cast<ImTextureID*>(pID);
+
+            ImGui::Image(textureID, ImVec2(200, 200));
+        }
+
+        for (auto mesh : m_model3MF->meshModels())
+        {
+            ImGui::Text("Vertex Count: %d", mesh->numVertices());
+            ImGui::Text("Triangle Count: %d", mesh->numTriangles());
+            ImGui::Separator();
+        }
+
+        ImGui::End();
+    }
+}
+
 void
 MainApp::init()
 {
-    m_camera = std::make_shared<Camera>( glm::vec3(0.0f, 0.0f, 12.0f),
+    m_camera = std::make_shared<Camera>( glm::vec3(0.0f, 0.0f, 16.0f),
                                          glm::vec3(0.0f, 0.0f, 0.0f), 
                                          width(), height());
 
@@ -38,11 +105,6 @@ MainApp::init()
 
     m_facetedShader = std::make_shared<ShaderLoaderGL>(path + "Shaders/facetedShader.vert",
                                                        path + "Shaders/facetedShader.frag");
-
-    std::string filePath(path + "3MF/letters.3mf");
-    std::wstring pathWStr(filePath.begin(), filePath.end());
-    m_model3MF = std::make_unique<Import3MF>(pathWStr);
-    assert(m_model3MF);
 }
 
 void 
@@ -63,10 +125,15 @@ MainApp::draw()
 
     worldAxisDraw(m_camera, m_vertexShader);
 
-    for (auto mesh : m_model3MF->meshModels())
+    if (m_model3MF)
     {
-        mesh->draw(m_camera, m_facetedShader);
+        for (auto mesh : m_model3MF->meshModels())
+        {
+            mesh->draw(m_camera, m_facetedShader);
+        }
     }
+
+    windowGL()->setTitle(std::to_string(Timer::getMillSecPerFrame()));
 }
 
 void

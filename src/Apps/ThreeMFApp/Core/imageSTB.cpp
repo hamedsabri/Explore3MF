@@ -9,6 +9,12 @@
 
 using namespace E3D;
 
+ImageSTB::ImageSTB( const PixelsBuffer& pixelsBuffer )
+    : m_pixels(pixelsBuffer)
+{
+    readFromMemory(pixelsBuffer);
+}
+
 ImageSTB::ImageSTB( const char* filename )
 {
     readFromFile(filename);
@@ -17,6 +23,12 @@ ImageSTB::ImageSTB( const char* filename )
 ImageSTB::~ImageSTB()
 {
     stbi_image_free(m_data);
+}
+
+void
+ImageSTB::readFromMemory( const PixelsBuffer& pixelsBuffer )
+{
+    m_data = stbi_load_from_memory(&pixelsBuffer[0], static_cast<int>(pixelsBuffer.size()), &m_width, &m_height, &m_channels, 4);
 }
 
 void

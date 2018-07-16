@@ -8,6 +8,7 @@ WindowGL * WindowGL::m_windowGL = nullptr;
 
 WindowGL::WindowGL()
     : m_glfWindow(nullptr)
+    , m_windowTitle("")
 {
     m_windowGL = this;
 }
@@ -27,14 +28,20 @@ WindowGL::initialize()
     // initialize GLFW
     glfwInit();
 
-    // set all the required options for GLFW
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_SAMPLES, m_multiSample);
+    // decide GL+GLSL versions
+    #if __APPLE__
+        const char* glsl_version = "#version 330";
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    #else
+        const char* glsl_version = "#version 330";
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    #endif
 
-    // needed for mac
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, 1);
+    glfwWindowHint(GLFW_SAMPLES, m_multiSample);
 
     glfwWindowHint(GLFW_DEPTH_BITS, 24);
     glfwWindowHint(GLFW_RED_BITS, 8);
@@ -43,7 +50,7 @@ WindowGL::initialize()
     glfwWindowHint(GLFW_ALPHA_BITS, 8);
 
     // create glfw window and default openGL context
-    m_glfWindow = glfwCreateWindow(m_width, m_height, "", nullptr, nullptr);
+    m_glfWindow = glfwCreateWindow(m_width, m_height, m_windowTitle.c_str(), nullptr, nullptr);
     if (m_glfWindow)
     {
         glfwMakeContextCurrent(m_glfWindow);
@@ -64,8 +71,15 @@ WindowGL::initialize()
         return;
     }
 
-    // client code
+    // setup ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(m_glfWindow, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
+
     init();
+
+    guiSetup();
 
     makeCentered();
 }
@@ -79,12 +93,10 @@ WindowGL::open(int w, int h, int multiSample)
 
     initialize();
 
-    // client code
     preDraw();
 
     drawLoop();
 
-    // client code
     postDraw();
 }
 
@@ -96,11 +108,29 @@ WindowGL::drawLoop()
         // event processing
         glfwPollEvents();
 
-        // client code
+        // update timer
+        Timer::updateTime();
+
+        // start the ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        guiDraw();
+
         draw();
-        
+
+        // ImGui rendering
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(m_glfWindow);
     }
+
+    // cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     glfwTerminate();
 }
@@ -125,6 +155,14 @@ WindowGL::setSize(int width, int height)
 {
     m_width = width;
     m_height = height;
+}
+
+void 
+WindowGL::setTitle(const std::string& titleName)
+{
+    m_windowTitle = titleName;
+
+    glfwSetWindowTitle(m_glfWindow, m_windowTitle.c_str());
 }
 
 void WindowGL::makeCentered()

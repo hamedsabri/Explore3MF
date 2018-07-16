@@ -33,9 +33,39 @@ HOW TO UPDATE?
  VERSION 1.63 WIP (IN PROGRESS)
 -----------------------------------------------------------------------
 
+Breaking Changes:
+
+ - Removed per-window ImGuiWindowFlags_ResizeFromAnySide beta flag in favor `io.OptResizeWindowsFromEdges=true` to enable the feature globally. (#1495)
+   The feature is not currently enabled by default because it is not satisfying enough.
+ - Style: Renamed ImGuiCol_ModalWindowDarkening to ImGuiCol_ModalWindowDimBg for consistency with other features. Kept redirection enum (will obsolete).
+
 Other Changes:
+
  - ArrowButton: Fixed to honor PushButtonRepeat() setting (and internals' ImGuiItemFlags_ButtonRepeat).
  - ArrowButton: Setup current line text baseline so that ArrowButton() + SameLine() + Text() are aligned properly.
+ - Nav: Added a CTRL+TAB window list and changed the highlight system accordingly. This is designed to allow CTRL+TAB between Tabs in the future.   
+ - Window: Allow menu and popups windows from ignoring the style.WindowMinSize values so short menus/popups are not padded. (#1909)
+ - Window: Added global io.OptResizeWindowsFromEdges option to enable resizing windows from their edges and from the lower-left corner. (#1495)
+ - Drag and Drop: Fixed an incorrect assert when dropping a source that is submitted after the target (bug introduced with 1.62 changes 
+   related to the addition of IsItemDeactivated()). (#1875, #143)
+ - Drag and Drop: Fixed ImGuiDragDropFlags_SourceNoDisableHover to affect hovering state prior to calling IsItemHovered() + fixed description. (#143)
+ - Drag and Drop: Calling BeginTooltip() between a BeginDragSource()/EndDragSource() or BeginDropTarget()/EndDropTarget() uses adjusted tooltip
+   settings matching the one created when calling BeginDragSource() without the ImGuiDragDropFlags_SourceNoPreviewTooltip flag. (#143)
+ - IsItemHovered(): Added ImGuiHoveredFlags_AllowWhenDisabled flag to query hovered status on disabled items. (#1940, #211)
+ - Misc: Added ImGuiMouseCursor_Hand cursor enum + corresponding software cursor. (#1913, 1914) [@aiekick, @ocornut] 
+ - Misc: Tweaked software mouse cursor offset to match the offset of the corresponding Windows 10 cursors.
+ - Fixed a include build issue for Cygwin in non-POSIX (Win32) mode. (#1917, #1319, #276)
+ - OS/Windows: Fixed missing ImmReleaseContext() call in the default Win32 IME handler. (#1932) [@vby]
+ - Demo: Added basic Drag and Drop demo. (#143)
+ - Examples: Metal: Added Metal rendering backend. (#1929, #1873) [@warrenm]
+ - Examples: OSX: Added early raw OSX platform backend. (#1873) [@pagghiu, @itamago, @ocornut]
+ - Examples: Added mac OSX & iOS + Metal example in example_apple_metal/. (#1929, #1873) [@warrenm]
+ - Examples: Added mac OSX + OpenGL2 example in example_apple_opengl2/. (#1873)
+ - Examples: OpenGL3: Added shaders more versions of GLSL. (#1938, #1900, #1513, #1466, etc.) 
+ - Examples: OpenGL3: Made the example app default to GL 3.0 + GLSL 130 (instead of GL 3.2 + GLSL 150) unless on Mac.
+ - Examples: OpenGL3: Added error output when shaders fail to compile/link.
+ - Examples: DirectX10, DirectX11: Fixed unreleased resources in Init and Shutdown functions. (#1944)
+ - Examples: Win32, Glfw, SDL: Added support for the ImGuiMouseCursor_Hand cursor.
 
 
 -----------------------------------------------------------------------
@@ -87,6 +117,7 @@ Other Changes:
  - SliderFloat(): When using keyboard/gamepad and a zero precision format string (e.g. "%.0f"), always step in integer units. (#1866)
  - ImFontConfig: Added GlyphMinAdvanceX/GlyphMaxAdvanceX settings useful to make a font appears monospaced, particularly useful for icon fonts. (#1869)
  - ImFontAtlas: Added GetGlyphRangesChineseSimplifiedCommon() helper that returns a list of ~2500 most common Simplified Chinese characters. (#1859) [@JX-Master, @ocornut]
+ - Examples: OSX: Added imgui_impl_osx.mm binding to be used along with e.g. imgui_impl_opengl2.cpp. (#281, #1870) [@pagghiu, @itamago, @ocornut]
  - Examples: GLFW: Made it possible to Shutdown/Init the backend again (by reseting the time storage properly). (#1827) [@ice1000]
  - Examples: Win32: Fixed handling of mouse wheel messages to support sub-unit scrolling messages (typically sent by track-pads). (#1874) [@zx64]  
  - Examples: SDL+Vulkan: Added SDL+Vulkan example.
@@ -704,9 +735,9 @@ Other Changes:
 - Clipboard: Added a void* user_data parameter to Clipboard function handlers. (#875) (BREAKING API)
 - Internals: Refactor internal text alignment options to use ImVec2, removed ImGuiAlign. (#842, #222)
 - Internals: Renamed ImLoadFileToMemory to ImFileLoadToMemory to be consistent with ImFileOpen + fix mismatching .h name. (#917)
-- Windows: Fixed Windows default clipboard handler leaving its buffer unfreed on application's exit. (#714)
-- Windows: No default IME handler when compiling for Windows using GCC. (#738)
-- Windows: Now using _wfopen() instead of fopen() to allow passing in paths/filenames with UTF-8 characters. (#917)
+- OS/Windows: Fixed Windows default clipboard handler leaving its buffer unfreed on application's exit. (#714)
+- OS/Windows: No default IME handler when compiling for Windows using GCC. (#738)
+- OS/Windows: Now using _wfopen() instead of fopen() to allow passing in paths/filenames with UTF-8 characters. (#917)
 - Tools: binary_to_compressed_c: Avoid ?? trigraphs sequences in string outputs which break some older compilers. (#839)
 - Demo: Added an extra 3-way columns demo.
 - Demo: ShowStyleEditor: show font character map / grid in more details.

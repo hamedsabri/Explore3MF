@@ -2,7 +2,6 @@
 #define IMPORT_3MF_H
 
 #include <string>
-
 #include <vector>
 #include <memory>
 
@@ -12,6 +11,9 @@ namespace E3D
 
     class MeshModel;
     using PMeshModel = std::shared_ptr<MeshModel>;
+
+    class Texture2D;
+    using PTexture = std::shared_ptr<Texture2D>;
 
     using MeshModels = std::vector<PMeshModel>;
 }
@@ -24,6 +26,8 @@ public:
 
     MeshModels meshModels() const;
 
+    PTexture packageIcon() const { return m_packageIcon; }
+
 private:
     Import3MF( const Import3MF& ) = delete;
     Import3MF& operator=( const Import3MF& ) = delete;
@@ -32,6 +36,8 @@ private:
 
 private:
     MeshModels m_meshModels;
+
+    PTexture m_packageIcon;
 };
 
 #endif //IMPORT_3MF_H

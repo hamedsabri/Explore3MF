@@ -19,13 +19,13 @@
 
 #include <stdio.h>      // vsnprintf, sscanf, printf
 #if !defined(alloca)
-#ifdef _WIN32
+#if defined(__GLIBC__) || defined(__sun) || defined(__CYGWIN__)
+#include <alloca.h>     // alloca (glibc uses <alloca.h>. Note that Cygwin may have _WIN32 defined, so the order matters here)
+#elif defined(_WIN32)
 #include <malloc.h>     // alloca
 #if !defined(alloca)
 #define alloca _alloca  // for clang with MS Codegen
 #endif
-#elif defined(__GLIBC__) || defined(__sun)
-#include <alloca.h>     // alloca
 #else
 #include <stdlib.h>     // alloca
 #endif
@@ -97,7 +97,8 @@ namespace IMGUI_STB_NAMESPACE
 #ifndef STB_RECT_PACK_IMPLEMENTATION                        // in case the user already have an implementation in the _same_ compilation unit (e.g. unity builds)
 #ifndef IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
 #define STBRP_STATIC
-#define STBRP_ASSERT(x)    IM_ASSERT(x)
+#define STBRP_ASSERT(x)     IM_ASSERT(x)
+#define STBRP_SORT          ImQsort
 #define STB_RECT_PACK_IMPLEMENTATION
 #endif
 #ifdef IMGUI_STB_RECT_PACK_FILENAME
@@ -194,10 +195,11 @@ void ImGui::StyleColorsDark(ImGuiStyle* dst)
     colors[ImGuiCol_PlotHistogram]          = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
     colors[ImGuiCol_PlotHistogramHovered]   = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
     colors[ImGuiCol_TextSelectedBg]         = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
-    colors[ImGuiCol_ModalWindowDarkening]   = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
     colors[ImGuiCol_DragDropTarget]         = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
     colors[ImGuiCol_NavHighlight]           = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
     colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+    colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
+    colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.80f, 0.80f, 0.80f, 0.35f);
 }
 
 void ImGui::StyleColorsClassic(ImGuiStyle* dst)
@@ -243,10 +245,11 @@ void ImGui::StyleColorsClassic(ImGuiStyle* dst)
     colors[ImGuiCol_PlotHistogram]          = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
     colors[ImGuiCol_PlotHistogramHovered]   = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
     colors[ImGuiCol_TextSelectedBg]         = ImVec4(0.00f, 0.00f, 1.00f, 0.35f);
-    colors[ImGuiCol_ModalWindowDarkening]   = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
     colors[ImGuiCol_DragDropTarget]         = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
     colors[ImGuiCol_NavHighlight]           = colors[ImGuiCol_HeaderHovered];
     colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+    colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
+    colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 }
 
 // Those light colors are better suited with a thicker font than the default one + FrameBorder
@@ -293,10 +296,11 @@ void ImGui::StyleColorsLight(ImGuiStyle* dst)
     colors[ImGuiCol_PlotHistogram]          = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
     colors[ImGuiCol_PlotHistogramHovered]   = ImVec4(1.00f, 0.45f, 0.00f, 1.00f);
     colors[ImGuiCol_TextSelectedBg]         = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
-    colors[ImGuiCol_ModalWindowDarkening]   = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
     colors[ImGuiCol_DragDropTarget]         = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
     colors[ImGuiCol_NavHighlight]           = colors[ImGuiCol_HeaderHovered];
     colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(0.70f, 0.70f, 0.70f, 0.70f);
+    colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(0.20f, 0.20f, 0.20f, 0.20f);
+    colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 }
 
 //-----------------------------------------------------------------------------
@@ -1267,23 +1271,6 @@ void ImGui::ShadeVertsLinearColorGradientKeepAlpha(ImDrawVert* vert_start, ImDra
     }
 }
 
-// Scan and shade backward from the end of given vertices. Assume vertices are text only (= vert_start..vert_end going left to right) so we can break as soon as we are out the gradient bounds.
-void ImGui::ShadeVertsLinearAlphaGradientForLeftToRightText(ImDrawVert* vert_start, ImDrawVert* vert_end, float gradient_p0_x, float gradient_p1_x)
-{
-    float gradient_extent_x = gradient_p1_x - gradient_p0_x;
-    float gradient_inv_length2 = 1.0f / (gradient_extent_x * gradient_extent_x);
-    int full_alpha_count = 0;
-    for (ImDrawVert* vert = vert_end - 1; vert >= vert_start; vert--)
-    {
-        float d = (vert->pos.x - gradient_p0_x) * (gradient_extent_x);
-        float alpha_mul = 1.0f - ImClamp(d * gradient_inv_length2, 0.0f, 1.0f);
-        if (alpha_mul >= 1.0f && ++full_alpha_count > 2)
-            return; // Early out
-        int a = (int)(((vert->col >> IM_COL32_A_SHIFT) & 0xFF) * alpha_mul);
-        vert->col = (vert->col & ~IM_COL32_A_MASK) | (a << IM_COL32_A_SHIFT);
-    }
-}
-
 // Distribute UV over (a, b) rectangle
 void ImGui::ShadeVertsLinearUV(ImDrawVert* vert_start, ImDrawVert* vert_end, const ImVec2& a, const ImVec2& b, const ImVec2& uv_a, const ImVec2& uv_b, bool clamp)
 {
@@ -1340,50 +1327,51 @@ ImFontConfig::ImFontConfig()
 
 // A work of art lies ahead! (. = white layer, X = black layer, others are blank)
 // The white texels on the top left are the ones we'll use everywhere in ImGui to render filled shapes.
-const int FONT_ATLAS_DEFAULT_TEX_DATA_W_HALF = 90;
+const int FONT_ATLAS_DEFAULT_TEX_DATA_W_HALF = 108;
 const int FONT_ATLAS_DEFAULT_TEX_DATA_H      = 27;
 const unsigned int FONT_ATLAS_DEFAULT_TEX_DATA_ID = 0x80000000;
 static const char FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS[FONT_ATLAS_DEFAULT_TEX_DATA_W_HALF * FONT_ATLAS_DEFAULT_TEX_DATA_H + 1] =
 {
-    "..-         -XXXXXXX-    X    -           X           -XXXXXXX          -          XXXXXXX"
-    "..-         -X.....X-   X.X   -          X.X          -X.....X          -          X.....X"
-    "---         -XXX.XXX-  X...X  -         X...X         -X....X           -           X....X"
-    "X           -  X.X  - X.....X -        X.....X        -X...X            -            X...X"
-    "XX          -  X.X  -X.......X-       X.......X       -X..X.X           -           X.X..X"
-    "X.X         -  X.X  -XXXX.XXXX-       XXXX.XXXX       -X.X X.X          -          X.X X.X"
-    "X..X        -  X.X  -   X.X   -          X.X          -XX   X.X         -         X.X   XX"
-    "X...X       -  X.X  -   X.X   -    XX    X.X    XX    -      X.X        -        X.X      "
-    "X....X      -  X.X  -   X.X   -   X.X    X.X    X.X   -       X.X       -       X.X       "
-    "X.....X     -  X.X  -   X.X   -  X..X    X.X    X..X  -        X.X      -      X.X        "
-    "X......X    -  X.X  -   X.X   - X...XXXXXX.XXXXXX...X -         X.X   XX-XX   X.X         "
-    "X.......X   -  X.X  -   X.X   -X.....................X-          X.X X.X-X.X X.X          "
-    "X........X  -  X.X  -   X.X   - X...XXXXXX.XXXXXX...X -           X.X..X-X..X.X           "
-    "X.........X -XXX.XXX-   X.X   -  X..X    X.X    X..X  -            X...X-X...X            "
-    "X..........X-X.....X-   X.X   -   X.X    X.X    X.X   -           X....X-X....X           "
-    "X......XXXXX-XXXXXXX-   X.X   -    XX    X.X    XX    -          X.....X-X.....X          "
-    "X...X..X    ---------   X.X   -          X.X          -          XXXXXXX-XXXXXXX          "
-    "X..X X..X   -       -XXXX.XXXX-       XXXX.XXXX       ------------------------------------"
-    "X.X  X..X   -       -X.......X-       X.......X       -    XX           XX    -           "
-    "XX    X..X  -       - X.....X -        X.....X        -   X.X           X.X   -           "
-    "      X..X          -  X...X  -         X...X         -  X..X           X..X  -           "
-    "       XX           -   X.X   -          X.X          - X...XXXXXXXXXXXXX...X -           "
-    "------------        -    X    -           X           -X.....................X-           "
-    "                    ----------------------------------- X...XXXXXXXXXXXXX...X -           "
-    "                                                      -  X..X           X..X  -           "
-    "                                                      -   X.X           X.X   -           "
-    "                                                      -    XX           XX    -           "
+    "..-         -XXXXXXX-    X    -           X           -XXXXXXX          -          XXXXXXX-     XX          "
+    "..-         -X.....X-   X.X   -          X.X          -X.....X          -          X.....X-    X..X         "
+    "---         -XXX.XXX-  X...X  -         X...X         -X....X           -           X....X-    X..X         "
+    "X           -  X.X  - X.....X -        X.....X        -X...X            -            X...X-    X..X         "
+    "XX          -  X.X  -X.......X-       X.......X       -X..X.X           -           X.X..X-    X..X         "
+    "X.X         -  X.X  -XXXX.XXXX-       XXXX.XXXX       -X.X X.X          -          X.X X.X-    X..XXX       "
+    "X..X        -  X.X  -   X.X   -          X.X          -XX   X.X         -         X.X   XX-    X..X..XXX    "
+    "X...X       -  X.X  -   X.X   -    XX    X.X    XX    -      X.X        -        X.X      -    X..X..X..XX  "
+    "X....X      -  X.X  -   X.X   -   X.X    X.X    X.X   -       X.X       -       X.X       -    X..X..X..X.X "
+    "X.....X     -  X.X  -   X.X   -  X..X    X.X    X..X  -        X.X      -      X.X        -XXX X..X..X..X..X"
+    "X......X    -  X.X  -   X.X   - X...XXXXXX.XXXXXX...X -         X.X   XX-XX   X.X         -X..XX........X..X"
+    "X.......X   -  X.X  -   X.X   -X.....................X-          X.X X.X-X.X X.X          -X...X...........X"
+    "X........X  -  X.X  -   X.X   - X...XXXXXX.XXXXXX...X -           X.X..X-X..X.X           - X..............X"
+    "X.........X -XXX.XXX-   X.X   -  X..X    X.X    X..X  -            X...X-X...X            -  X.............X"
+    "X..........X-X.....X-   X.X   -   X.X    X.X    X.X   -           X....X-X....X           -  X.............X"
+    "X......XXXXX-XXXXXXX-   X.X   -    XX    X.X    XX    -          X.....X-X.....X          -   X............X"
+    "X...X..X    ---------   X.X   -          X.X          -          XXXXXXX-XXXXXXX          -   X...........X "
+    "X..X X..X   -       -XXXX.XXXX-       XXXX.XXXX       -------------------------------------    X..........X "
+    "X.X  X..X   -       -X.......X-       X.......X       -    XX           XX    -           -    X..........X "
+    "XX    X..X  -       - X.....X -        X.....X        -   X.X           X.X   -           -     X........X  "
+    "      X..X          -  X...X  -         X...X         -  X..X           X..X  -           -     X........X  "
+    "       XX           -   X.X   -          X.X          - X...XXXXXXXXXXXXX...X -           -     XXXXXXXXXX  "
+    "------------        -    X    -           X           -X.....................X-           ------------------"
+    "                    ----------------------------------- X...XXXXXXXXXXXXX...X -                             "
+    "                                                      -  X..X           X..X  -                             "
+    "                                                      -   X.X           X.X   -                             "
+    "                                                      -    XX           XX    -                             "
 };
 
 static const ImVec2 FONT_ATLAS_DEFAULT_TEX_CURSOR_DATA[ImGuiMouseCursor_COUNT][3] =
 {
     // Pos ........ Size ......... Offset ......
-    { ImVec2(0,3),  ImVec2(12,19), ImVec2( 0, 0) }, // ImGuiMouseCursor_Arrow
-    { ImVec2(13,0), ImVec2(7,16),  ImVec2( 4, 8) }, // ImGuiMouseCursor_TextInput
+    { ImVec2( 0,3), ImVec2(12,19), ImVec2( 0, 0) }, // ImGuiMouseCursor_Arrow
+    { ImVec2(13,0), ImVec2( 7,16), ImVec2( 1, 8) }, // ImGuiMouseCursor_TextInput
     { ImVec2(31,0), ImVec2(23,23), ImVec2(11,11) }, // ImGuiMouseCursor_ResizeAll
-    { ImVec2(21,0), ImVec2( 9,23), ImVec2( 5,11) }, // ImGuiMouseCursor_ResizeNS
-    { ImVec2(55,18),ImVec2(23, 9), ImVec2(11, 5) }, // ImGuiMouseCursor_ResizeEW
-    { ImVec2(73,0), ImVec2(17,17), ImVec2( 9, 9) }, // ImGuiMouseCursor_ResizeNESW
-    { ImVec2(55,0), ImVec2(17,17), ImVec2( 9, 9) }, // ImGuiMouseCursor_ResizeNWSE
+    { ImVec2(21,0), ImVec2( 9,23), ImVec2( 4,11) }, // ImGuiMouseCursor_ResizeNS
+    { ImVec2(55,18),ImVec2(23, 9), ImVec2(11, 4) }, // ImGuiMouseCursor_ResizeEW
+    { ImVec2(73,0), ImVec2(17,17), ImVec2( 8, 8) }, // ImGuiMouseCursor_ResizeNESW
+    { ImVec2(55,0), ImVec2(17,17), ImVec2( 8, 8) }, // ImGuiMouseCursor_ResizeNWSE
+    { ImVec2(91,0), ImVec2(17,22), ImVec2( 5, 0) }, // ImGuiMouseCursor_Hand
 };
 
 ImFontAtlas::ImFontAtlas()

@@ -20,6 +20,8 @@ public:
     ~MainApp();
 
 private:
+    void guiSetup() override;
+    void guiDraw() override;
     void init() override;
     void preDraw() override;
     void draw() override;

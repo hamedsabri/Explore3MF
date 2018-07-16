@@ -1,14 +1,16 @@
 #include <import3MF.h>
 
-#include <Common/Platform/NMR_ImportStream_GCC_Native.h>
 #include <Common/MeshInformation/NMR_MeshInformation_BaseMaterials.h>
+#include <Common/Platform/NMR_ImportStream_GCC_Native.h>
 
-#include <Model/Reader/NMR_ModelReader_3MF_Native.h>
-#include <Model/Classes/NMR_ModelBuildItem.h>
+#include <Model/Classes/NMR_ModelAttachment.h>
 #include <Model/Classes/NMR_ModelBaseMaterial.h>
 #include <Model/Classes/NMR_ModelBaseMaterials.h>
+#include <Model/Classes/NMR_ModelBuildItem.h>
+#include <Model/Reader/NMR_ModelReader_3MF_Native.h>
 
 #include <meshModel.h>
+#include <texture2D.h>
 
 #include <assert.h>
 #include <iostream>
@@ -245,6 +247,21 @@ Import3MF::readData(const std::wstring& fileName)
         const glm::mat4& M = getItemTransform(model, item);
 
         saveMeshDataPerItem(model, mesh, m_meshModels, baseMaterialsMap, M);
+    }
+
+    // thumbnail 
+    PModelAttachment thumbAttach = model->getPackageThumbnail();
+
+    if (thumbAttach)
+    {
+        // get the data in memory
+        PImportStream thumbStream = thumbAttach->getStream();
+
+        std::vector<unsigned char> pixelsBuffer;
+        pixelsBuffer.resize(thumbStream->retrieveSize());
+        thumbStream->readBuffer(&pixelsBuffer[0], thumbStream->retrieveSize(), true);
+
+        m_packageIcon = std::make_shared<Texture2D>(pixelsBuffer);
     }
 
     return true;
