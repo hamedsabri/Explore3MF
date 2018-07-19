@@ -1,11 +1,12 @@
 #ifndef MESH_MODEL_H
 #define MESH_MODEL_H
 
-#include <vector>
-
 #include <Camera.h>
 #include <MeshData.h>
 #include <MeshDraw.h>
+
+#include <string>
+#include <vector>
 
 namespace E3D
 {

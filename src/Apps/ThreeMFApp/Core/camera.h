@@ -14,10 +14,10 @@ class E3D::Camera
 {
 public:
     Camera(glm::vec3 eyePos, glm::vec3 lookAtPos, int w, int h) 
-        : m_eyePos(eyePos)
-        , m_lookAtPos(lookAtPos)
-        , m_width(w)
+        : m_width(w)
         , m_height(h)
+		, m_eyePos(eyePos)
+		, m_lookAtPos(lookAtPos)
     {
     }
 
@@ -35,7 +35,7 @@ public:
     }
 
     glm::mat4 
-    viewMatrix()
+    viewMatrix() const
     {
         return glm::lookAt( m_eyePos, 
                             m_lookAtPos, 
@@ -43,7 +43,7 @@ public:
     }
 
     glm::mat4 
-    projectionMatrix()
+    projectionMatrix() const
     {
         return glm::perspectiveFov(45.0f, 
                                    static_cast<float>(m_width), 
