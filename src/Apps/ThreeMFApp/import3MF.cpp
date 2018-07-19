@@ -126,7 +126,8 @@ namespace
                          PMesh mesh,
                          std::vector<PMeshModel>& meshModels,
                          PIdToBasematerial& baseMaterialMap,
-                         const glm::mat4& transform)
+                         const glm::mat4& transform,
+                         const std::string& objectName )
     {
         MeshData meshData;
 
@@ -196,7 +197,8 @@ namespace
         }
 
         PMeshModel meshModel = std::make_shared<MeshModel>(meshData);
-        meshModel->setAffineTransformMatrix(transform);
+        meshModel->affineTransformMatrix = transform;
+        meshModel->setName(objectName);
 
         meshModels.push_back(meshModel);
     }
@@ -243,10 +245,21 @@ Import3MF::readData(const std::wstring& fileName)
         PMesh mesh = std::make_shared<CMesh>();
         object->mergeToMesh(mesh.get());
 
+        // object name
+        std::string objectName;
+        if (object->getName().empty())
+        {
+            objectName = "Object_" + std::to_string(item->getObjectID());
+        }
+        else
+        {
+            objectName = object->getName();
+        }
+
         // item transformation
         const glm::mat4& M = getItemTransform(model, item);
 
-        saveMeshDataPerItem(model, mesh, m_meshModels, baseMaterialsMap, M);
+        saveMeshDataPerItem(model, mesh, m_meshModels, baseMaterialsMap, M, objectName);
     }
 
     // thumbnail 

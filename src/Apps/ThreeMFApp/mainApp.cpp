@@ -26,72 +26,6 @@ MainApp::~MainApp()
 {
 }
 
-void 
-MainApp::guiSetup()
-{
-    // window styling
-    ImGui::StyleColorsDark();
-
-    ImGuiStyle * style = &ImGui::GetStyle();
-    style->WindowRounding = 0.0f;
-    style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.00f);
-    style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.00f);
-    style->Colors[ImGuiCol_WindowBg] = ImVec4(0.1f, 0.04f, 0.07f, 1.00f);
-    style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
-    style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
-}
-
-void 
-MainApp::guiDraw()
-{  
-    // menu bar
-    if (ImGui::BeginMainMenuBar())
-    {
-        if (ImGui::BeginMenu("File"))
-        {
-            if (ImGui::MenuItem("Import")) 
-            {
-                nfdchar_t * fileName = NULL;
-                nfdresult_t result = NFD_OpenDialog("3mf, 3MF", NULL, &fileName);
-
-                if ( result == NFD_OKAY )
-                {
-                    std::string path3MfFile(fileName);
-                    std::wstring path3MfFileW(path3MfFile.begin(), path3MfFile.end());
-                    m_model3MF = std::make_unique<Import3MF>(path3MfFileW);
-                }
-            }
-
-            ImGui::EndMenu();
-        }
-
-        ImGui::EndMainMenuBar();
-    }
-
-    // debug window
-    if (m_model3MF)
-    {
-        ImGui::Begin("Mesh Debug", NULL, ImGuiWindowFlags_AlwaysAutoResize);
-
-        if (m_model3MF->packageIcon())
-        {
-            uintptr_t pID = static_cast<uintptr_t>(m_model3MF->packageIcon()->id());
-            ImTextureID * textureID = reinterpret_cast<ImTextureID*>(pID);
-
-            ImGui::Image(textureID, ImVec2(200, 200));
-        }
-
-        for (auto mesh : m_model3MF->meshModels())
-        {
-            ImGui::Text("Vertex Count: %d", mesh->numVertices());
-            ImGui::Text("Triangle Count: %d", mesh->numTriangles());
-            ImGui::Separator();
-        }
-
-        ImGui::End();
-    }
-}
-
 void
 MainApp::init()
 {
@@ -186,5 +120,165 @@ MainApp::worldAxisDraw(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoade
 
         auto meshLine = std::make_unique<MeshLine>(vertices);
         meshLine->draw(cam, shader);
+    }
+}
+
+void
+MainApp::guiSetup()
+{
+    // window styling
+    ImGuiStyle * style = &ImGui::GetStyle();
+
+    style->WindowRounding = 3.0f;
+    style->FrameRounding = 3.0f;
+
+    style->Colors[ImGuiCol_Text] = ImVec4(0.80f, 0.80f, 0.83f, 1.0f);
+    style->Colors[ImGuiCol_TextDisabled] = ImVec4(0.24f, 0.23f, 0.29f, 1.0f);
+    style->Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.05f, 0.07f, 1.0f);
+    style->Colors[ImGuiCol_ChildWindowBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.0f);
+    style->Colors[ImGuiCol_PopupBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.0f);
+    style->Colors[ImGuiCol_FrameBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.0f);
+    style->Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.0f);
+    style->Colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.0f);
+    style->Colors[ImGuiCol_TitleBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.0f);
+    style->Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.10f, 0.09f, 0.12f, 1.0f);
+    style->Colors[ImGuiCol_TitleBgActive] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);
+    style->Colors[ImGuiCol_MenuBarBg] = ImVec4(0.10f, 0.09f, 0.12f, 1.0f);
+    style->Colors[ImGuiCol_SliderGrab] = ImVec4(0.80f, 0.80f, 0.83f, 0.31f);
+    style->Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.06f, 0.05f, 0.07f, 1.0f);
+    style->Colors[ImGuiCol_Button] = ImVec4(0.10f, 0.09f, 0.12f, 1.00f);
+    style->Colors[ImGuiCol_ButtonHovered] = ImVec4(0.24f, 0.23f, 0.29f, 1.0f);
+    style->Colors[ImGuiCol_ButtonActive] = ImVec4(0.56f, 0.56f, 0.58f, 1.0f);
+    style->Colors[ImGuiCol_Header] = ImVec4(0.10f, 0.09f, 0.12f, 1.0f);
+    style->Colors[ImGuiCol_HeaderHovered] = ImVec4(0.10f, 0.09f, 0.12f, 1.0f);
+    style->Colors[ImGuiCol_HeaderActive] = ImVec4(0.10f, 0.09f, 0.12f, 1.0f);
+    style->Colors[ImGuiCol_ModalWindowDarkening] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f);
+}
+
+void
+MainApp::guiDraw()
+{
+    // menu bar
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Import"))
+            {
+                nfdchar_t * fileName = nullptr;
+                nfdresult_t result = NFD_OpenDialog("3mf, 3MF", nullptr, &fileName);
+
+                if (result == NFD_OKAY)
+                {
+                    std::string path3MfFile(fileName);
+                    std::wstring path3MfFileW(path3MfFile.begin(), path3MfFile.end());
+                    m_model3MF = std::make_unique<Import3MF>(path3MfFileW);
+                }
+            }
+
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+    }
+
+    // mesh debug
+    if (m_model3MF)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0, 0.5f, 0.0f, 1.0f));
+        ImGui::Begin("Mesh Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+        ImGui::PopStyleColor(1);
+
+        if (m_model3MF->packageIcon())
+        {
+            uintptr_t pID = static_cast<uintptr_t>(m_model3MF->packageIcon()->id());
+            ImTextureID * textureID = reinterpret_cast<ImTextureID*>(pID);
+
+            ImGui::Image(textureID, ImVec2(200, 200));
+        }
+
+        for (auto i = 0; i < m_model3MF->meshModels().size(); ++i)
+        {
+            auto mesh = m_model3MF->meshModels()[i];
+
+            ImGui::PushID(i);
+            if (ImGui::TreeNode("%s", mesh->getName().c_str()))
+            {
+                ImGui::PushID(i);
+                if (ImGui::CollapsingHeader("Poly Count"))
+                {
+                    ImGui::Text("Vertex Count: %d", mesh->getNumVertices());
+                    ImGui::Text("Triangle Count: %d", mesh->getNumTriangles());
+                }
+
+                if (ImGui::CollapsingHeader("Transform"))
+                {
+                    ImGui::Text("Translate");
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0, 0.0f, 0.0f, 1.0f));
+                    if (ImGui::Button("TX")) { mesh->translate.x = 0.0f; }
+                    ImGui::PopStyleColor(1);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##tx", (float*)&mesh->translate.x, 0.1f, 10000.0f);
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0, 1.0f, 0.0f, 1.0f));
+                    if (ImGui::Button("TY")) { mesh->translate.y = 0.0f; }
+                    ImGui::PopStyleColor(1);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##ty", (float*)&mesh->translate.y, 0.1f, 10000.0f);
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0, 0.0f, 1.0f, 1.0f));
+                    if (ImGui::Button("TZ")) { mesh->translate.z = 0.0f; }
+                    ImGui::PopStyleColor(1);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##tz", (float*)&mesh->translate.z, 0.1f, 10000.0f);
+
+                    ImGui::Text("Rotation");
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0, 0.0f, 0.0f, 1.0f));
+                    if (ImGui::Button("RX")) { mesh->rotate.x = 0.0f; }
+                    ImGui::PopStyleColor(1);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##rx", (float*)&mesh->rotate.x, 0.1f, 360.0f);
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0, 1.0f, 0.0f, 1.0f));
+                    if (ImGui::Button("RY")) { mesh->rotate.y = 0.0f; }
+                    ImGui::PopStyleColor(1);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##ry", (float*)&mesh->rotate.y, 0.1f, 360.0f);
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0, 0.0f, 1.0f, 1.0f));
+                    if (ImGui::Button("RZ")) { mesh->rotate.z = 0.0f; }
+                    ImGui::PopStyleColor(1);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##rz", (float*)&mesh->rotate.z, 0.1f, 360.0f);
+
+                    ImGui::Text("Scale");
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0, 0.0f, 0.0f, 1.0f));
+                    if (ImGui::Button("SX")) { mesh->scale.x = 1.0f; }
+                    ImGui::PopStyleColor(1);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##sx", (float*)&mesh->scale.x, 0.1f, 10000.0f);
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0, 1.0f, 0.0f, 1.0f));
+                    if (ImGui::Button("SY")) { mesh->scale.y = 1.0f; }
+                    ImGui::PopStyleColor(1);  
+                    ImGui::SameLine();          
+                    ImGui::InputFloat("##sy", (float*)&mesh->scale.y, 0.1f, 10000.0f);
+
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0, 0.0f, 1.0f, 1.0f));
+                    if (ImGui::Button("SZ")) { mesh->scale.z = 1.0f; }
+                    ImGui::PopStyleColor(1);
+                    ImGui::SameLine();
+                    ImGui::InputFloat("##sz", (float*)&mesh->scale.z, 0.1f, 10000.0f);
+                }
+                ImGui::PopID();
+                ImGui::TreePop();
+            }
+            ImGui::PopID();
+        }
+
+        ImGui::End();
     }
 }

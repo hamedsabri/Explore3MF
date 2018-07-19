@@ -25,14 +25,14 @@ public:
 
     void open(int, int, int multiSample = 4 );
 
-    virtual void guiSetup() = 0;
-    virtual void guiDraw() = 0;
-
     virtual void init() = 0;
     virtual void preDraw() = 0;
     virtual void draw() = 0;
     virtual void postDraw() = 0;
     virtual void onResize(GLFWwindow*, int, int) = 0;
+	
+	virtual void guiSetup() = 0;
+	virtual void guiDraw() = 0;
 
     void setSize(int, int);
     void setTitle(const std::string&);

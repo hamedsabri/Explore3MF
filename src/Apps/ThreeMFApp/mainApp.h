@@ -20,13 +20,14 @@ public:
     ~MainApp();
 
 private:
-    void guiSetup() override;
-    void guiDraw() override;
     void init() override;
     void preDraw() override;
     void draw() override;
     void postDraw() override;
     void onResize(GLFWwindow* window, int width, int height) override;
+
+	void guiSetup() override;
+	void guiDraw() override;
 
     void worldAxisDraw(std::shared_ptr<Camera>&, std::shared_ptr<ShaderLoaderGL>&);
 

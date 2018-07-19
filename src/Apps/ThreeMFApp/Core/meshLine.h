@@ -22,9 +22,6 @@ public:
     void draw( std::shared_ptr<Camera>&, 
                std::shared_ptr<ShaderLoaderGL>& ) override;
 
-    void setAffineTransformMatrix(const glm::mat4&) override;
-    glm::mat4 getAffineTransformMatrix() const override;
-
 protected:
     void sendDataToGPU() override;
     void updatMatrices( std::shared_ptr<Camera>&, 

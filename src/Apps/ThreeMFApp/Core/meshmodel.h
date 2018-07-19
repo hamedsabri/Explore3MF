@@ -22,11 +22,11 @@ public:
 
     void draw(std::shared_ptr<Camera>&, std::shared_ptr<ShaderLoaderGL>&) override;
 
-    void setAffineTransformMatrix( const glm::mat4& ) override;
-    glm::mat4 getAffineTransformMatrix() const override;
+    void setName(const std::string&);
+    std::string getName() const;
 
-    uint32_t numVertices() const;
-    uint32_t numTriangles() const;
+    uint32_t getNumVertices() const;
+    uint32_t getNumTriangles() const;
 
 protected:
     void sendDataToGPU() override;
@@ -34,6 +34,8 @@ protected:
 
 private:
     MeshData m_meshData;
+
+    std::string m_name;
 };
 
 #endif //MESH_MODEL_H
