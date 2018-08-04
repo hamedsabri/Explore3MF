@@ -1,2 +1,1 @@
-*.C linguist-language=C++
-*.H linguist-language=C++
+*.3mf filter=lfs diff=lfs merge=lfs -text
