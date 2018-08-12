@@ -1,7 +1,7 @@
 #ifndef WORLD_GRID_H
 #define WORLD_GRID_H
 
-#include <MeshData.h>
+#include <meshData.h>
 
 #include <memory>
 

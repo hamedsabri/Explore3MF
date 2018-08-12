@@ -1,4 +1,4 @@
-#include <ShaderLoaderGL.h>
+#include <shaderLoaderGL.h>
 
 #include <vector>
 #include <fstream>

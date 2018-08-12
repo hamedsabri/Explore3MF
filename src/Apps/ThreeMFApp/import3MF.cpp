@@ -12,6 +12,7 @@
 #include <meshModel.h>
 #include <texture2D.h>
 
+#include <glm/gtc/type_precision.hpp>
 #include <assert.h>
 #include <iostream>
 #include <sstream>

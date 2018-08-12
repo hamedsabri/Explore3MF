@@ -1,9 +1,9 @@
 #ifndef MESH_MODEL_H
 #define MESH_MODEL_H
 
-#include <Camera.h>
-#include <MeshData.h>
-#include <MeshDraw.h>
+#include <camera.h>
+#include <meshData.h>
+#include <meshDraw.h>
 
 #include <string>
 #include <vector>

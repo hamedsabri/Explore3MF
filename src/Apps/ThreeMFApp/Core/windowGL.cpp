@@ -1,4 +1,4 @@
-#include <WindowGL.h>
+#include <windowGL.h>
 
 #include <iostream>
 

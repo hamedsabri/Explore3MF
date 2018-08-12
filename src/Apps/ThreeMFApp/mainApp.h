@@ -1,7 +1,7 @@
 #ifndef MAIN_APP_H
 #define MAIN_APP_H
 
-#include <WindowGL.h>
+#include <windowGL.h>
 #include <memory>
 
 namespace E3D

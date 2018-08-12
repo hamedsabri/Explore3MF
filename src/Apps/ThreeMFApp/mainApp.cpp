@@ -34,12 +34,11 @@ MainApp::init()
                                          glm::vec3(0.0f, 0.0f, 0.0f), 
                                          width(), height());
 
-    std::string path(RESOURCEDIR_PATH);
-    m_vertexShader = std::make_shared<ShaderLoaderGL>(path + "Shaders/vertexColorShader.vert",
-                                                      path + "Shaders/vertexColorShader.frag");
+    m_vertexShader = std::make_shared<ShaderLoaderGL>(RESOURCEDIR_PATH "Shaders/vertexColorShader.vert",
+                                                      RESOURCEDIR_PATH "Shaders/vertexColorShader.frag");
 
-    m_facetedShader = std::make_shared<ShaderLoaderGL>(path + "Shaders/facetedShader.vert",
-                                                       path + "Shaders/facetedShader.frag");
+    m_facetedShader = std::make_shared<ShaderLoaderGL>(RESOURCEDIR_PATH "Shaders/facetedShader.vert",
+                                                       RESOURCEDIR_PATH "Shaders/facetedShader.frag");
 
     m_worldGrid = std::make_unique<WorldGrid>();
 }
