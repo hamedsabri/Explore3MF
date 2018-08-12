@@ -21,7 +21,7 @@ Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF
 
 1. Install all needed tools, libraries, and compilers.
     
-    - sudo apt-get install cmake clang xorg-dev libx11-dev libglu1-mesa-dev libglu1-mesa libglu1-mesa-dev libgl1-mesa-glx libgl1-mesa-dev uuid-dev
+    - sudo apt-get install cmake clang xorg-dev libx11-dev libglu1-mesa-dev libglu1-mesa libglu1-mesa-dev libgl1-mesa-glx libgl1-mesa-dev uuid-dev gtk+3.0
 
 2. Generate UNIX Makefile:
 
