@@ -1,5 +1,7 @@
 #include <windowGL.h>
 
+#include <imageSTB.h>
+
 #include <iostream>
 
 using namespace E3D;
@@ -163,6 +165,14 @@ WindowGL::setTitle(const std::string& titleName)
     m_windowTitle = titleName;
 
     glfwSetWindowTitle(m_glfWindow, m_windowTitle.c_str());
+}
+
+void 
+WindowGL::setWindowIcon(const char* imagePath)
+{
+    ImageSTB image(imagePath);
+    GLFWimage imageGLFW { image.width(), image.height(), image.data() };
+    glfwSetWindowIcon(m_glfWindow, 1, &imageGLFW);
 }
 
 void WindowGL::makeCentered()

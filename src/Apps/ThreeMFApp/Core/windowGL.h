@@ -15,6 +15,7 @@
 namespace E3D
 {
     class WindowGL;
+    class ImageSTB;
 }
 
 class E3D::WindowGL
@@ -36,6 +37,7 @@ public:
 
     void setSize(int, int);
     void setTitle(const std::string&);
+    void setWindowIcon(const char*);
 
     int width(){ return m_width; }
     int height(){ return m_height; }

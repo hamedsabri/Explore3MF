@@ -30,6 +30,8 @@ MainApp::~MainApp()
 void
 MainApp::init()
 {
+    windowGL()->setWindowIcon(RESOURCEDIR_PATH "Icons/window_icon.png");
+
     m_camera = std::make_shared<Camera>( glm::vec3(0.0f, 8.0f, 12.0f),
                                          glm::vec3(0.0f, 0.0f, 0.0f), 
                                          width(), height());
