@@ -139,55 +139,55 @@ WorldGrid::draw(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoaderGL>& s
 }
 
 float 
-E3D::WorldGrid::getGridBreakUnit() const
+WorldGrid::getGridBreakUnit() const
 {
     return m_fBreakUnit;
 }
 
 int
-E3D::WorldGrid::getGridHighlightUnit() const
+WorldGrid::getGridHighlightUnit() const
 {
     return m_iHighlightBreaks;
 }
 
 Axis 
-E3D::WorldGrid::getAxis() const
+WorldGrid::getAxis() const
 {
     return m_Axis;
 }
 
 void 
-E3D::WorldGrid::setAxis(Axis axis)
+WorldGrid::setAxis(Axis axis)
 { 
     m_Axis = axis;
 }
 
 void 
-E3D::WorldGrid::setEnableGrid(bool enable_grid)
+WorldGrid::setEnableGrid(bool enable_grid)
 {
     m_bEnableGrid = enable_grid;
 }
 
 void 
-E3D::WorldGrid::setWorldAxisLenght(float length)
+WorldGrid::setWorldAxisLenght(float length)
 {
     m_worldAxisLenght = length;
 }
 
 void 
-E3D::WorldGrid::setGridSize(int iSize)
+WorldGrid::setGridSize(int iSize)
 {
     m_iSize = iSize;
 }
 
 void 
-E3D::WorldGrid::setGridHighlightUnit(int iHighlightBreaks)
+WorldGrid::setGridHighlightUnit(int iHighlightBreaks)
 {
     m_iHighlightBreaks = iHighlightBreaks;
 }
 
 glm::vec3 
-E3D::WorldGrid::setAxisOrder(float x, float y, float z)
+WorldGrid::setAxisOrder(float x, float y, float z)
 {
     //Specify the order of GRID X Y Z 
     if (m_Axis == Axis::Y)
@@ -205,7 +205,7 @@ E3D::WorldGrid::setAxisOrder(float x, float y, float z)
 }
 
 int 
-E3D::WorldGrid::getGridSize() const
+WorldGrid::getGridSize() const
 {
     return m_iSize;
 }
