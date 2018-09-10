@@ -41,15 +41,16 @@ target_include_directories( ${PROJECTNAME} PRIVATE include
     ${TBB_INCLUDE_DIR}
 )
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(TBB_LIB_TYPE ${TBB_LIBRARY_DEBUG})
+else(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(TBB_LIB_TYPE ${TBB_LIBRARY})
+endif()
+
 if (WIN32)
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(TBB_LIB_TYPE ${TBB_LIBRARY_DEBUG})
-    else(CMAKE_BUILD_TYPE STREQUAL "Release")
-        set(TBB_LIB_TYPE ${TBB_LIBRARY})
-    endif()
     target_link_libraries( ${PROJECTNAME} lib3MF thirdPartyLibs ${TBB_LIB_TYPE} )
 elseif(APPLE)
-    target_link_libraries( ${PROJECTNAME} ${MACOS_LIBRARIES} lib3MF thirdPartyLibs )
+    target_link_libraries( ${PROJECTNAME} ${MACOS_LIBRARIES} lib3MF thirdPartyLibs ${TBB_LIB_TYPE} )
 elseif(UNIX AND NOT APPLE)
     target_link_libraries( ${PROJECTNAME} lib3MF uuid thirdPartyLibs glfw ${GLFW_LIBRARIES} ${GTK3_LIBRARIES})
 endif()

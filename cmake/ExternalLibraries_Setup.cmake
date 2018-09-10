@@ -26,7 +26,10 @@ foreach (CONFIGURATION_TYPE ${CMAKE_CONFIGURATION_TYPES})
         ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/
     )
 endforeach()
-endif() # WIN32
+else (APPLE)
+    set( TBB_LIBRARY "${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/binary/Mac/lib/libtbb.dylib" CACHE FILEPATH "")
+    set( TBB_LIBRARY_DEBUG "${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/binary/Mac/lib/libtbb_debug.dylib" CACHE FILEPATH "")
+endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 
