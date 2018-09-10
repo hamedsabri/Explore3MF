@@ -52,7 +52,7 @@ if (WIN32)
 elseif(APPLE)
     target_link_libraries( ${PROJECTNAME} ${MACOS_LIBRARIES} lib3MF thirdPartyLibs ${TBB_LIB_TYPE} )
 elseif(UNIX AND NOT APPLE)
-    target_link_libraries( ${PROJECTNAME} lib3MF uuid thirdPartyLibs glfw ${GLFW_LIBRARIES} ${GTK3_LIBRARIES})
+    target_link_libraries( ${PROJECTNAME} lib3MF uuid thirdPartyLibs glfw ${GLFW_LIBRARIES} ${GTK3_LIBRARIES} ${TBB_LIB_TYPE} )
 endif()
 
 # ---------------------------------------------------------------------------------
