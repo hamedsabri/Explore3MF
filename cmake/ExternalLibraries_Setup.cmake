@@ -1,4 +1,38 @@
 # ---------------------------------------------------------------------------------
+# Intel Threading Building Blocks (TBB)
+# ---------------------------------------------------------------------------------
+set( TBB_ROOT_DIR ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5 CACHE PATH "")
+set( TBB_INCLUDE_DIR ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/include CACHE PATH "")
+
+if(WIN32)
+set( TBB_LIBRARY "${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/binary/Win/lib/tbb.lib" CACHE FILEPATH "")
+set( TBB_LIBRARY_DEBUG "${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/binary/Win/lib/tbb_debug.lib" CACHE FILEPATH "")
+
+message(${CMAKE_BUILD_TYPE})
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set (TBB_DLL ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/binary/Win/bin/tbb_debug.dll)
+    set (TBB_PDB ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/binary/Win/bin/tbb_debug.pdb)
+else(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set (TBB_DLL ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/binary/Win/bin/tbb.dll)
+    set (TBB_PDB ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/TBB/2018_Update5/binary/Win/bin/tbb.pdb)
+endif()
+
+# copy *.dll, *.pdb
+execute_process(COMMAND cmake -E make_directory ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE})
+foreach (CONFIGURATION_TYPE ${CMAKE_CONFIGURATION_TYPES})
+    execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${TBB_DLL}
+        ${TBB_PDB}
+        ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_BUILD_TYPE}/
+    )
+endforeach()
+endif() # WIN32
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
+
+find_package(TBB REQUIRED)
+
+# ---------------------------------------------------------------------------------
 # Lib3MF                                                                    
 # ---------------------------------------------------------------------------------
 add_subdirectory(${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Lib3MF/f4d873e5 ${CMAKE_CURRENT_BINARY_DIR}/lib3MF)

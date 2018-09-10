@@ -37,10 +37,17 @@ target_include_directories( ${PROJECTNAME} PRIVATE include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/ImGui/d4cd121a
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/STBImage/e6afb9cb
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/NativeFileDialog/5cfe5002
+
+    ${TBB_INCLUDE_DIR}
 )
 
 if (WIN32)
-    target_link_libraries( ${PROJECTNAME} lib3MF thirdPartyLibs )
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(TBB_LIB_TYPE ${TBB_LIBRARY_DEBUG})
+    else(CMAKE_BUILD_TYPE STREQUAL "Release")
+        set(TBB_LIB_TYPE ${TBB_LIBRARY})
+    endif()
+    target_link_libraries( ${PROJECTNAME} lib3MF thirdPartyLibs ${TBB_LIB_TYPE} )
 elseif(APPLE)
     target_link_libraries( ${PROJECTNAME} ${MACOS_LIBRARIES} lib3MF thirdPartyLibs )
 elseif(UNIX AND NOT APPLE)
