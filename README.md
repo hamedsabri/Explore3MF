@@ -17,11 +17,15 @@ Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF
     - on mac run cmake .. -G "Xcode" -DCMAKE_OSX_ARCHITECTURES=x86_64
     - if you want release build, simply pass -DCMAKE_BUILD_TYPE=Release
 
-## Linux (Ubuntu) Build
+## RedHat and Debian Build
 
 1. Install all needed tools, libraries, and compilers.
-    
-    - sudo apt-get install cmake clang xorg-dev libx11-dev libglu1-mesa-dev libglu1-mesa libglu1-mesa-dev libgl1-mesa-glx libgl1-mesa-dev uuid-dev gtk+3.0
+
+#### Debian    
+    sudo apt-get install cmake clang xorg-dev libx11-dev libglu1-mesa-dev libglu1-mesa libglu1-mesa-dev libgl1-mesa-glx  libgl1-mesa-dev uuid-dev gtk+3.0
+
+#### RedHat
+    sudo dnf -y install cmake clang libX11-devel libX11-devel libXrandr-devel libXinerama-devel libXcursor-devel mesa-libGL gtk3-devel uuid-devel
 
 2. Generate UNIX Makefile:
 
