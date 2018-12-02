@@ -2,6 +2,7 @@
 
 #include <camera.h>
 #include <import3MF.h>
+#include <export3MF.h>
 #include <meshLine.h>
 #include <meshModel.h>
 #include <shaderLoaderGL.h>
@@ -63,9 +64,9 @@ MainApp::draw()
 
     m_worldGrid->draw(m_camera, m_vertexShader);
 
-    if (m_model3MF)
+    if (m_importModel3MF)
     {
-        for (auto mesh : m_model3MF->meshModels())
+        for (auto mesh : m_importModel3MF->meshModels())
         {
             mesh->draw(m_camera, m_facetedShader);
         }
@@ -134,7 +135,24 @@ MainApp::guiDraw()
                 {
                     std::string path3MfFile(fileName);
                     std::wstring path3MfFileW(path3MfFile.begin(), path3MfFile.end());
-                    m_model3MF = std::make_unique<Import3MF>(path3MfFileW);
+                    m_importModel3MF = std::make_unique<Import3MF>(path3MfFileW);
+                }
+            }
+
+            ImGui::Separator();
+
+            if (ImGui::MenuItem("Export"))
+            {
+                nfdchar_t * fileName = nullptr;
+                nfdresult_t result = NFD_SaveDialog("3mf, 3MF", nullptr, &fileName);
+
+                if (result == NFD_OKAY)
+                {
+                    std::string path3MfFile(fileName);
+                    if (m_importModel3MF)
+                    {
+                        Export3MF exportModel3MF(path3MfFile + ".3mf", m_importModel3MF->meshModels());
+                    }
                 }
             }
 
@@ -145,23 +163,23 @@ MainApp::guiDraw()
     }
 
     // mesh debug
-    if (m_model3MF)
+    if (m_importModel3MF)
     {
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0, 0.5f, 0.0f, 1.0f));
         ImGui::Begin("Mesh Debug", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
         ImGui::PopStyleColor(1);
 
-        if (m_model3MF->packageIcon())
+        if (m_importModel3MF->packageIcon())
         {
-            uintptr_t pID = static_cast<uintptr_t>(m_model3MF->packageIcon()->id());
+            uintptr_t pID = static_cast<uintptr_t>(m_importModel3MF->packageIcon()->id());
             ImTextureID * textureID = reinterpret_cast<ImTextureID*>(pID);
 
             ImGui::Image(textureID, ImVec2(200, 200));
         }
 
-        for (auto i = 0; i < m_model3MF->meshModels().size(); ++i)
+        for (auto i = 0; i < m_importModel3MF->meshModels().size(); ++i)
         {
-            auto mesh = m_model3MF->meshModels()[i];
+            auto mesh = m_importModel3MF->meshModels()[i];
 
             ImGui::PushID(i);
             if (ImGui::TreeNode("%s", mesh->getName().c_str()))

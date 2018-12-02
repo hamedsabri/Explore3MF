@@ -35,7 +35,7 @@ private:
     std::shared_ptr<ShaderLoaderGL> m_vertexShader;
     std::shared_ptr<ShaderLoaderGL> m_facetedShader;
 
-    std::unique_ptr<Import3MF> m_model3MF;
+    std::unique_ptr<Import3MF> m_importModel3MF;
     std::unique_ptr<WorldGrid> m_worldGrid;
 };
 

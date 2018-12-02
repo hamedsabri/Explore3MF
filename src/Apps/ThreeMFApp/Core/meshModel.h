@@ -6,6 +6,7 @@
 #include <meshDraw.h>
 
 #include <string>
+#include <array>
 #include <vector>
 
 namespace E3D
@@ -13,6 +14,8 @@ namespace E3D
     class MeshModel;
     class Camera;
     class ShaderLoaderGL;
+
+    using RawTriangles = std::vector<std::array<uint32_t,3>>;
 }
 
 class E3D::MeshModel : public MeshDraw
@@ -28,6 +31,9 @@ public:
 
     uint32_t getNumVertices() const;
     uint32_t getNumTriangles() const;
+
+    RawVertices getVertices() const;
+    RawTriangles getTriangles() const;
 
 protected:
     void sendDataToGPU() override;

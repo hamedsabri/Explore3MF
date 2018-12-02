@@ -21,11 +21,14 @@ namespace E3D
             color = _color;
         }
     };
+	
+	using RawVertices = std::vector<Vertex>;
+	using RawIndices = std::vector<uint32_t>;
 
     struct MeshData
     {
-        std::vector<Vertex> vertices;
-        std::vector<uint32_t> indices;
+        RawVertices vertices;
+        RawIndices indices;
     };
 }
 

@@ -49,10 +49,6 @@ MeshLine::sendDataToGPU()
 void
 MeshLine::updatMatrices(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoaderGL>& shader)
 {
-    glm::mat4 model(1.0f);
-    glm::mat4 view(1.0f);
-    glm::mat4 projection(1.0f);
-
     glm::mat4 T = glm::mat4(1.0f);
     T = glm::translate(T, translate);
 
@@ -68,16 +64,11 @@ MeshLine::updatMatrices(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoad
     glm::mat4 S = glm::mat4(1.0f);
     S = glm::scale(S, scale);
 
-    model = model * affineTransformMatrix;
-
-    model = T * Rz * Ry * Rx * S * model;
-
-    view = cam->viewMatrix();
-    projection = cam->projectionMatrix();
+    model = T * Rz * Ry * Rx * S * affineTransformMatrix;
 
     shader->setUniform("ModelMatrix", model);
-    shader->setUniform("ViewMatrix", view);
-    shader->setUniform("ProjectionMatrix", projection);
+    shader->setUniform("ViewMatrix", cam->viewMatrix());
+    shader->setUniform("ProjectionMatrix", cam->projectionMatrix());
 }
 
 void
