@@ -54,7 +54,7 @@ Export3MF::saveData(const std::string& fileName, const MeshModels& meshModels)
         return false;
     }
 
-    // write scene thumbnail
+    // TODO: write scene thumbnail
 
     // write mesh 
     for (auto const mesh : meshModels)
@@ -123,7 +123,27 @@ Export3MF::saveData(const std::string& fileName, const MeshModels& meshModels)
                                                  &Triangles[0], 
                                                  numTriangles );
 
-        // set mesh thumbnail
+
+        // write out color ( we only have one color, so grab it from any one of the vertices)
+        MODELMESHCOLOR_SRGB color;
+        color.m_Red = static_cast<unsigned char>(vertices[0].color.r * 255.0f);
+        color.m_Green = static_cast<unsigned char>(vertices[0].color.g * 255.0f);
+        color.m_Blue = static_cast<unsigned char>(vertices[0].color.b * 255.0f);
+        color.m_Alpha = static_cast<unsigned char>(vertices[0].color.a * 255.0f);
+
+        CustomBase defaultColorPropertyHandler;
+        hResult = lib3mf_object_createdefaultpropertyhandler(meshObject.get(), &defaultColorPropertyHandler.get());
+        if (hResult != LIB3MF_OK)
+        {
+            std::cout << "default color property handler failed!" << "\n";
+        }
+        lib3mf_defaultpropertyhandler_setcolor(defaultColorPropertyHandler.get(), &color);
+
+		for (auto i = 0; i < numTriangles; ++i) {
+			lib3mf_propertyhandler_setsinglecolor(defaultColorPropertyHandler.get(), i, &color);
+		}
+
+        // TODO: set mesh thumbnail
 
 
         // add build item for Mesh
