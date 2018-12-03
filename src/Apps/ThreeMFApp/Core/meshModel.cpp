@@ -50,10 +50,6 @@ MeshModel::sendDataToGPU()
 void 
 MeshModel::updatMatrices(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoaderGL>& shader)
 {
-    glm::mat4 model(1.0f);
-    glm::mat4 view(1.0f);
-    glm::mat4 projection(1.0f);
-
     glm::mat4 T = glm::mat4(1.0f);
     T = glm::translate(T, translate);
 
@@ -69,17 +65,12 @@ MeshModel::updatMatrices(std::shared_ptr<Camera>& cam, std::shared_ptr<ShaderLoa
     glm::mat4 S = glm::mat4(1.0f);
     S = glm::scale(S, scale);
 
-    model = model * affineTransformMatrix;
-
-    model = T * Rz * Ry * Rx * S * model;
-
-    view = cam->viewMatrix();
-    projection = cam->projectionMatrix();
+    model = T * Rz * Ry * Rx * S * affineTransformMatrix;
 
     // shader uniforms
     shader->setUniform("ModelMatrix", model);
-    shader->setUniform("ViewMatrix", view);
-    shader->setUniform("ProjectionMatrix", projection);
+    shader->setUniform("ViewMatrix", cam->viewMatrix());
+    shader->setUniform("ProjectionMatrix", cam->projectionMatrix());
 }
 
 void
@@ -106,6 +97,39 @@ uint32_t
 MeshModel::getNumTriangles() const
 {
     return static_cast<uint32_t>(m_meshData.indices.size() / 3);
+}
+
+RawVertices
+MeshModel::getVertices() const
+{
+    return m_meshData.vertices;
+}
+
+RawTriangles
+MeshModel::getTriangles() const
+{
+    uint32_t numTriangles = static_cast<uint32_t>(m_meshData.indices.size() / 3);
+
+    RawTriangles tris;
+    tris.resize(numTriangles);
+
+    auto it = m_meshData.indices.begin();
+
+    for (uint32_t i = 0; i < numTriangles; ++i)
+    {
+        std::array<uint32_t, 3> triIndices;
+
+        for (uint32_t j = 0 ; j < 3 ; ++j)
+        {
+            triIndices[j] = it[j];
+        }
+
+        tris[i] = triIndices;
+
+        std::advance(it, 3);
+    }
+
+    return tris;
 }
 
 void 
