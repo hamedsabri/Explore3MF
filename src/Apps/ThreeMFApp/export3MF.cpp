@@ -139,12 +139,11 @@ Export3MF::saveData(const std::string& fileName, const MeshModels& meshModels)
         }
         lib3mf_defaultpropertyhandler_setcolor(defaultColorPropertyHandler.get(), &color);
 
-		for (auto i = 0; i < numTriangles; ++i) {
-			lib3mf_propertyhandler_setsinglecolor(defaultColorPropertyHandler.get(), i, &color);
-		}
+        for (auto i = 0; i < numTriangles; ++i) {
+            lib3mf_propertyhandler_setsinglecolor(defaultColorPropertyHandler.get(), i, &color);
+        }
 
         // TODO: set mesh thumbnail
-
 
         // add build item for Mesh
         CustomBase buildItem;

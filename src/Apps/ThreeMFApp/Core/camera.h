@@ -16,8 +16,8 @@ public:
     Camera(glm::vec3 eyePos, glm::vec3 lookAtPos, int w, int h) 
         : m_width(w)
         , m_height(h)
-		, m_eyePos(eyePos)
-		, m_lookAtPos(lookAtPos)
+        , m_eyePos(eyePos)
+        , m_lookAtPos(lookAtPos)
     {
     }
 

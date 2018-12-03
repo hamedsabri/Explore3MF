@@ -31,9 +31,9 @@ public:
     virtual void draw() = 0;
     virtual void postDraw() = 0;
     virtual void onResize(GLFWwindow*, int, int) = 0;
-	
-	virtual void guiSetup() = 0;
-	virtual void guiDraw() = 0;
+    
+    virtual void guiSetup() = 0;
+    virtual void guiDraw() = 0;
 
     void setSize(int, int);
     void setTitle(const std::string&);
