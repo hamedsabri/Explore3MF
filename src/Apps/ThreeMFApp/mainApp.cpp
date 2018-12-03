@@ -151,7 +151,11 @@ MainApp::guiDraw()
                     std::string path3MfFile(fileName);
                     if (m_importModel3MF)
                     {
-                        Export3MF exportModel3MF(path3MfFile + ".3mf", m_importModel3MF->meshModels());
+                        #ifdef WIN32
+                            path3MfFile +=".3mf";
+                        #endif
+
+                        Export3MF exportModel3MF(path3MfFile, m_importModel3MF->meshModels());
                     }
                 }
             }
