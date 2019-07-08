@@ -6,6 +6,13 @@ jobs:
   displayName: Windows
   pool:
     vmImage: 'vs2015-win2012r2'
+
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '2.7'
+      architecture: 'x64'
+  
   strategy:
     matrix:
       64-bit Debug:
@@ -17,22 +24,9 @@ jobs:
         CMakeArgs: '-G"Visual Studio 14 2015 Win64"'
 
   steps:
-  - task: CMake@1
-    displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -Dgtest_force_shared_crt=TRUE'
-    inputs:
-      cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -Dgtest_force_shared_crt=TRUE'
-  
-  - task: CMake@1
-    displayName: 'cmake --build . --config $(BuildType)'
-    inputs:
-      cmakeArgs: '--build . --config $(BuildType)'
-
-  - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-    workingDirectory: build
-    displayName: 'Run Ctest'
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: drop'
+    - script: python build.py --build_dir -- install_dir build
+      workingDirectory: build
+      displayName: 'Compile'
 
 - job: 
   displayName: macOS
