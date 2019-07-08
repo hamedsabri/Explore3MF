@@ -32,10 +32,9 @@ jobs:
     - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) $(InstallFolder) 
       displayName: 'Compile'
     
-    - script: dir $(BuildFolder)/bin
+    - script: cd $(BuildFolder)
 
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: $(BuildFolder)
       displayName: 'Run Ctest'
 
 # - job: 
