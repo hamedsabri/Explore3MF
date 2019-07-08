@@ -32,10 +32,23 @@ jobs:
     - script: python build.py --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) build
       displayName: 'Compile'
     
-    - task: BatchScript@1
-      displayName: 'Unit Tests'
-      inputs:
-        filename: 'build\build\bin\$(BuildType)\unit_tests.exe'
+    - script: dir
+
+    - script: dir build
+
+    - script: cd build\build\bin\Debug
+
+    - script: dir
+
+    - script: unit_tests.exe
+
+
+
+
+    # - task: BatchScript@1
+    #   displayName: 'Unit Tests'
+    #   inputs:
+    #     filename: 'build\build\bin\$(BuildType)\unit_tests.exe'
       
     # - task: CmdLine@2
     #   inputs:
