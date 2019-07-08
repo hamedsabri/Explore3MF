@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/hamedsabri.Explore3MF?branchName=azure-pipelines)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=1&branchName=azure-pipelines)
+
 ## Explore3MF
 
 Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF) + Lib3MF library.
