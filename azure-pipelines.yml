@@ -24,7 +24,7 @@ jobs:
         addToPath: true 
     - script: mkdir build
     - script: python --version
-    - script: python build.py --build_dir C:\build --install_dir C:\build
+    - script: python build.py C:\build
       displayName: 'Compile'
 
 # - job: 
