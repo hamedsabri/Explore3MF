@@ -11,7 +11,7 @@ jobs:
     matrix:
       64-bit Debug:
         BuildType: Debug
-        CMakeArgs: '-G "Visual Studio 15 2017 Win64"'
+        CMakeArgs: '"Visual Studio 15 2017 Win64"'
         BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
         InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
         
@@ -21,35 +21,35 @@ jobs:
       #   BuildFolder: 'C:\BUILD-SRC'
       #   InstallFolder: 'C:\BUILD-INSTALL'
 
-  # steps:
-  #   - task: UsePythonVersion@0
-  #     inputs:
-  #       versionSpec: '2.7'
-  #       addToPath: true 
-
-  #   - script: python --version
-
-  #   - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) $(InstallFolder) 
-  #     displayName: 'Compile'
-  
-  #   - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-  #     workingDirectory: $(BuildFolder)
-  #     displayName: 'Run Ctest'
-
   steps:
-  - task: CMake@1
-    displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
-    inputs:
-      cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '2.7'
+        addToPath: true 
 
-  - task: CMake@1
-    displayName: 'cmake --build . --config $(BuildType)'
-    inputs:
-      cmakeArgs: '--build . --config $(BuildType)'
+    - script: python --version
 
-  - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-    workingDirectory: build
-    displayName: 'Run Ctest'
+    - script: python build.py --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) build
+      displayName: 'Compile'
+    
+    - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+      workingDirectory: build
+      displayName: 'Run Ctest'
+
+  # steps:
+  # - task: CMake@1
+  #   displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
+  #   inputs:
+  #     cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
+
+  # - task: CMake@1
+  #   displayName: 'cmake --build . --config $(BuildType)'
+  #   inputs:
+  #     cmakeArgs: '--build . --config $(BuildType)'
+
+  # - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+  #   workingDirectory: build
+  #   displayName: 'Run Ctest'
 
 # - job: 
 #   displayName: macOS
