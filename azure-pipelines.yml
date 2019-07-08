@@ -14,9 +14,9 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
-  mkdir build
-  cd build  
-  cmake ..
-  cmake -- build .
-  ctest
-  displayName: 'Build'
+    mkdir build
+    cd build  
+    cmake ..
+    cmake -- build .
+    ctest
+displayName: 'Run a one-line script'
