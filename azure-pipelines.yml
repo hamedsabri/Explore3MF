@@ -32,9 +32,15 @@ jobs:
     - script: python build.py --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) build
       displayName: 'Compile'
     
-    - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: build
-      displayName: 'Run Ctest'
+    - task: CMake@1
+      displayName: 'CMake -E chdir build ctest -C $(BuildType) -j (Get-WmiObject -class Win32_processor | ft -HideTableHeaders NumberOfCores | Out-String).trim()'
+      inputs:
+        cmakeArgs: '-E chdir build ctest -C $(BuildType) -j (Get-WmiObject -class Win32_processor | ft -HideTableHeaders NumberOfCores | Out-String).trim()'
+      continueOnError: true
+
+    # - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+    #   workingDirectory: build
+    #   displayName: 'Run Ctest'
 
   # steps:
   # - task: CMake@1
