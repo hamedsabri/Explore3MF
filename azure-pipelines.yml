@@ -16,18 +16,6 @@ jobs:
         BuildType: Release
         CMakeArgs: '-G"Visual Studio 15 2017 Win64"'
 
-      64-bit Release Windows8Compat:
-        BuildType: Release
-        CMakeArgs: '-G"Visual Studio 15 2017 Win64" -DWIN8COMPAT=TRUE'
-
-      32-bit Debug:
-        BuildType: Debug
-        CMakeArgs: '-G"Visual Studio 15 2017"'
-
-      32-bit Release:
-        BuildType: Release
-        CMakeArgs: '-G"Visual Studio 15 2017"'
-
   steps:
   - task: CMake@1
     displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
