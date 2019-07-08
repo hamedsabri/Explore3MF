@@ -15,11 +15,11 @@ jobs:
         BuildFolder: 'C:\BUILD-SRC'
         InstallFolder: 'C:\BUILD-INSTALL'
         
-      64-bit Release:
-        BuildType: Release
-        CMakeArgs: '"Visual Studio 15 2017 Win64"'
-        BuildFolder: 'C:\BUILD-SRC'
-        InstallFolder: 'C:\BUILD-INSTALL'
+      # 64-bit Release:
+      #   BuildType: Release
+      #   CMakeArgs: '"Visual Studio 15 2017 Win64"'
+      #   BuildFolder: 'C:\BUILD-SRC'
+      #   InstallFolder: 'C:\BUILD-INSTALL'
 
   steps:
     - task: UsePythonVersion@0
@@ -32,38 +32,40 @@ jobs:
     - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
       displayName: 'Compile'
 
-    - script: dir $(BuildFolder)
+    - script: dir $(BuildFolder)\${Build.SourcesDirectory}
+
+    - script: dir $(InstallFolder)
     
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: $(BuildFolder)
+      workingDirectory: $(BuildFolder)\${Build.SourcesDirectory}
       displayName: 'Run Ctest'
 
-- job: 
-  displayName: macOS
-  pool:
-    vmImage: 'macOS-10.14'
-  strategy:
-    matrix:
-      Debug:
-        BuildType: Debug
-      Release:
-        BuildType: Release
+# - job: 
+#   displayName: macOS
+#   pool:
+#     vmImage: 'macOS-10.14'
+#   strategy:
+#     matrix:
+#       Debug:
+#         BuildType: Debug
+#       Release:
+#         BuildType: Release
 
-  steps:
-  - task: CMake@1
-    displayName: 'CMake .. -DCMAKE_BUILD_TYPE=$(BuildType)'
-    inputs:
-      cmakeArgs: '.. -DCMAKE_BUILD_TYPE=$(BuildType)'
+#   steps:
+#   - task: CMake@1
+#     displayName: 'CMake .. -DCMAKE_BUILD_TYPE=$(BuildType)'
+#     inputs:
+#       cmakeArgs: '.. -DCMAKE_BUILD_TYPE=$(BuildType)'
 
-  - script: |
-      make -j 4
-    workingDirectory: build
-    displayName: 'Compile'
+#   - script: |
+#       make -j 4
+#     workingDirectory: build
+#     displayName: 'Compile'
   
-  - script: |
-      ctest -j 4 --output-on-failure -C $(BuildType) -VV
-    workingDirectory: build
-    displayName: 'Test'
+#   - script: |
+#       ctest -j 4 --output-on-failure -C $(BuildType) -VV
+#     workingDirectory: build
+#     displayName: 'Test'
 
 
   # Using Plain CMAKE
