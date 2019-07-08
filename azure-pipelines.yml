@@ -29,7 +29,7 @@ jobs:
 
     - script: python --version
 
-    - script: python build.py --build-dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
+    - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
       displayName: 'Compile'
 
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
