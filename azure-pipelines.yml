@@ -21,20 +21,37 @@ jobs:
       #   BuildFolder: 'C:\BUILD-SRC'
       #   InstallFolder: 'C:\BUILD-INSTALL'
 
-  steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '2.7'
-        addToPath: true 
+  # steps:
+  #   - task: UsePythonVersion@0
+  #     inputs:
+  #       versionSpec: '2.7'
+  #       addToPath: true 
 
-    - script: python --version
+  #   - script: python --version
 
-    - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) $(InstallFolder) 
-      displayName: 'Compile'
+  #   - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) $(InstallFolder) 
+  #     displayName: 'Compile'
   
-    - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+  #   - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+  #     workingDirectory: $(BuildFolder)
+  #     displayName: 'Run Ctest'
+
+  steps:
+  - task: CMake@1
+    displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
+    inputs:
+      cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
       workingDirectory: $(BuildFolder)
-      displayName: 'Run Ctest'
+
+  - task: CMake@1
+    displayName: 'cmake --build . --config $(BuildType)'
+    inputs:
+      cmakeArgs: '--build . --config $(BuildType)'
+      workingDirectory: $(BuildFolder)
+
+  - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+    workingDirectory: $(BuildFolder)
+    displayName: 'Run Ctest'
 
 # - job: 
 #   displayName: macOS
