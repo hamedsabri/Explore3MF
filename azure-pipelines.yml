@@ -5,15 +5,13 @@ jobs:
 - job:
   displayName: Windows
   pool:
-    vmImage: 'vs2017-win2016' # vs2015-win2012r2
+    vmImage: 'vs2017-win2016'
   
   strategy:
     matrix:
-      64-bit Debug:
+      Ninja:
         BuildType: Debug
-        CMakeArgs: '"Visual Studio 15 2017 Win64"'
-        BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
-        InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
+        CMakeArgs: '"Ninja"'
         
       # 64-bit Release:
       #   BuildType: Release
@@ -32,30 +30,9 @@ jobs:
     - script: python build.py --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) build
       displayName: 'Compile'
     
-    - task: CMake@1
-      displayName: 'CMake -E chdir build ctest -C $(BuildType) -j (Get-WmiObject -class Win32_processor | ft -HideTableHeaders NumberOfCores | Out-String).trim()'
-      inputs:
-        cmakeArgs: '-E chdir build ctest -C $(BuildType) -j (Get-WmiObject -class Win32_processor | ft -HideTableHeaders NumberOfCores | Out-String).trim()'
-      continueOnError: true
-
     # - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
     #   workingDirectory: build
     #   displayName: 'Run Ctest'
-
-  # steps:
-  # - task: CMake@1
-  #   displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
-  #   inputs:
-  #     cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
-
-  # - task: CMake@1
-  #   displayName: 'cmake --build . --config $(BuildType)'
-  #   inputs:
-  #     cmakeArgs: '--build . --config $(BuildType)'
-
-  # - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-  #   workingDirectory: build
-  #   displayName: 'Run Ctest'
 
 # - job: 
 #   displayName: macOS
@@ -83,15 +60,3 @@ jobs:
 #       ctest -j 4 --output-on-failure -C $(BuildType) -VV
 #     workingDirectory: build
 #     displayName: 'Test'
-
-
-  # Using Plain CMAKE
-  # - task: CMake@1
-  #   displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -Dgtest_force_shared_crt=TRUE'
-  #   inputs:
-  #     cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -Dgtest_force_shared_crt=TRUE'
-  
-  # - task: CMake@1
-  #   displayName: 'cmake --build . --config $(BuildType)'
-  #   inputs:
-  #     cmakeArgs: '--build . --config $(BuildType)'
