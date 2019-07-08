@@ -11,7 +11,7 @@ jobs:
     matrix:
       64-bit Debug:
         BuildType: Debug
-        CMakeArgs: '"Visual Studio 15 2017 Win64"'
+        CMakeArgs: '-G"Visual Studio 15 2017 Win64"'
         BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
         InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
         
