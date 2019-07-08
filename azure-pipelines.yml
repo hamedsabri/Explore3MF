@@ -14,7 +14,6 @@ steps:
   displayName: 'Run a one-line script'
 
 - script: |
-  cmake --version
   mkdir build
   cd build  
   cmake ..
