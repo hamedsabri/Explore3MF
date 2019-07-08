@@ -22,7 +22,6 @@ jobs:
     inputs:
       cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
 
-  - script: 'ctest -j 4 -C $(BuildType)'
-    workingDirectory: build
+  - script: 'ctest -j 4 -C $(BuildType) -VV'
     displayName: 'Run Ctest'
 
