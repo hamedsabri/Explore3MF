@@ -12,14 +12,14 @@ jobs:
       64-bit Debug:
         BuildType: Debug
         CMakeArgs: '"Visual Studio 15 2017 Win64"'
-        BuildFolder: 'C:/BUILD-SRC'
-        InstallFolder: 'C:/BUILD-INSTALL'
+        BuildFolder: 'C:\\BUILD-SRC'
+        InstallFolder: 'C:\\BUILD-INSTALL'
         
       64-bit Release:
         BuildType: Release
         CMakeArgs: '"Visual Studio 15 2017 Win64"'
-        BuildFolder: 'C:/BUILD-SRC'
-        InstallFolder: 'C:/BUILD-INSTALL'
+        BuildFolder: 'C:\\BUILD-SRC'
+        InstallFolder: 'C:\\BUILD-INSTALL'
 
   steps:
     - task: UsePythonVersion@0
