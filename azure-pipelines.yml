@@ -6,16 +6,27 @@
 trigger:
 - azure-pipelines
 
-pool:
-  vmImage: 'vs2017-win2016'
+- job:
+  displayName: Windows
+  pool:
+    vmImage: 'vs2017-win2016'
+  strategy:
+    matrix:
+      64-bit Debug:
+        BuildType: Debug
+        CMakeArgs: '-G"Visual Studio 15 2017 Win64"'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+      64-bit Release:
+        BuildType: Release
+        CMakeArgs: '-G"Visual Studio 15 2017 Win64"'
 
-- script: |
-    mkdir build
-    cd build
-    cmake ..
-    cmake -- build .
-    ctest
+  steps:
+  - task: CMake@1
+    displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
+    inputs:
+      cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
+
+  - script: 'ctest -j 4 --interactive-debug-mode 0 --output-on-failure -C $(BuildType)'
+    workingDirectory: build
+    displayName: 'Run Ctest'
+
