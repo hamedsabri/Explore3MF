@@ -5,7 +5,6 @@ jobs:
 - job:
   displayName: Windows
   pool:
-    #vmImage: 'vs2015-win2012r2'
     vmImage: 'vs2017-win2016'
   
   # strategy:
@@ -24,7 +23,6 @@ jobs:
         versionSpec: '2.7'
         addToPath: true 
     - script: mkdir build
-    - script: cd build
     - script: python --version
     - script: python build.py --build_dir build -- install_dir build
       workingDirectory: build
