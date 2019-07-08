@@ -29,14 +29,11 @@ jobs:
 
     - script: python --version
 
-    - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
+    - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) $(InstallFolder) 
       displayName: 'Compile'
-
-    - script: dir $(InstallFolder)
-    - script: dir $(BuildFolder)
     
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: build
+      workingDirectory: $(BuildFolder)
       displayName: 'Run Ctest'
 
 # - job: 
