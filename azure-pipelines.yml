@@ -51,11 +51,9 @@ jobs:
   - script: |
       make -j 4
     workingDirectory: build
-    failOnStderr: true
     displayName: 'Compile'
   
   - script: |
       ctest -j 4 --output-on-failure -C $(BuildType) -VV
     workingDirectory: build
-    failOnStderr: true
     displayName: 'Test'
