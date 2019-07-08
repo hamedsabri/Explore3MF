@@ -32,12 +32,10 @@ jobs:
     - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
       displayName: 'Compile'
 
-    - script: dir $(BuildFolder)\${Build.SourcesDirectory}
-
     - script: dir $(InstallFolder)
     
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: $(BuildFolder)\${Build.SourcesDirectory}
+      workingDirectory: $(BuildFolder)\s
       displayName: 'Run Ctest'
 
 # - job: 
