@@ -36,8 +36,12 @@ jobs:
       displayName: 'Unit Tests'
       inputs:
         filename: 'build\$(BuildType)\unit_tests.exe'
-      enabled: false
       
+    - task: CmdLine@2
+      inputs:
+        script: '$(BuildType)\unit_tests.exe'
+        workingDirectory: 'build'
+
     # - task: CMake@1
     #   displayName: 'CMake -E chdir build ctest -C $(BuildType) -j (Get-WmiObject -class Win32_processor | ft -HideTableHeaders NumberOfCores | Out-String).trim()'
     #   inputs:
