@@ -29,11 +29,11 @@ jobs:
         versionSpec: '2.7'
         addToPath: true 
 
-    - script: python build.py $(Variant) --build_dir ${BuildFolder} --generator $(CMakeArgs) ${InstallFolder}
+    - script: python build.py $(Variant) --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
       displayName: 'compile, build, install'
       
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: ${BuildFolder}
+      workingDirectory: $(BuildFolder)
       displayName: 'Run Ctest'
 
 # - job: 
