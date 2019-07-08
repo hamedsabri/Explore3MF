@@ -17,10 +17,6 @@ jobs:
         CMakeArgs: '-G"Visual Studio 15 2017 Win64"'
 
   steps:
-  - script: 'mkdir build'
-  - script: 'cd build'
-    workingDirectory: build
-
   - task: CMake@1
     displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
     inputs:
