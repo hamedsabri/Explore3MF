@@ -5,7 +5,7 @@ jobs:
 - job:
   displayName: Windows
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'vs2015-win2012r2'
   strategy:
     matrix:
       64-bit Debug:
