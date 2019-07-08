@@ -35,12 +35,12 @@ jobs:
     - task: BatchScript@1
       displayName: 'Unit Tests'
       inputs:
-        filename: 'build\bin\$(BuildType)\unit_tests.exe'
+        filename: 'build\build\bin\$(BuildType)\unit_tests.exe'
       
-    - task: CmdLine@2
-      inputs:
-        script: '$(BuildType)\bin\unit_tests.exe'
-        workingDirectory: 'build'
+    # - task: CmdLine@2
+    #   inputs:
+    #     script: '$(BuildType)\bin\unit_tests.exe'
+    #     workingDirectory: 'build'
 
     # - task: CMake@1
     #   displayName: 'CMake -E chdir build ctest -C $(BuildType) -j (Get-WmiObject -class Win32_processor | ft -HideTableHeaders NumberOfCores | Out-String).trim()'
