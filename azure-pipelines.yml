@@ -18,9 +18,9 @@ jobs:
 
   steps:
   - task: CMake@1
-    displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DGTEST_FORCE_SHARED_CRT=TRUE'
+    displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -Dgtest_force_shared_crt=TRUE'
     inputs:
-      cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DGTEST_FORCE_SHARED_CRT=TRUE'
+      cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -Dgtest_force_shared_crt=TRUE'
   
   - task: CMake@1
     displayName: 'cmake --build . --config $(BuildType)'
