@@ -21,6 +21,10 @@ jobs:
     displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
     inputs:
       cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
+   
+  - script: |
+      cmake --build . -- /m:8
+    displayName: 'Build the project'
 
   - script: 'ctest -j 4 -C $(BuildType) -VV'
     workingDirectory: build
