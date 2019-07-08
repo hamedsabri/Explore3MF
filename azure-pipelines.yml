@@ -33,11 +33,14 @@ jobs:
       displayName: 'Compile'
 
     - script: |
-        dir build
         cd $(Build.SourcesDirectory)\Build
-        dir
         cd build
+        cd bin
         dir
+        cd Debug
+        dir
+        unit_tests.exe
+
     
     # - task: BatchScript@1
     #   displayName: 'Unit Tests'
