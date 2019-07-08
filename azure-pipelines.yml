@@ -15,8 +15,7 @@ steps:
 
 - script: |
     mkdir build
-    cd build  
+    cd build
     cmake ..
     cmake -- build .
     ctest
-displayName: 'Run a one-line script'
