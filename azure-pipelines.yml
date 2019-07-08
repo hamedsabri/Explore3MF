@@ -34,7 +34,7 @@ jobs:
     inputs:
       cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
 
-  - script: 'ctest -j 4 --interactive-debug-mode 0 --output-on-failure -C $(BuildType)'
+  - script: 'ctest -j 4 -C $(BuildType)'
     workingDirectory: build
     displayName: 'Run Ctest'
 
