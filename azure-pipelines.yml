@@ -35,11 +35,11 @@ jobs:
     - task: BatchScript@1
       displayName: 'Unit Tests'
       inputs:
-        filename: 'build\$(BuildType)\unit_tests.exe'
+        filename: 'build\bin\$(BuildType)\unit_tests.exe'
       
     - task: CmdLine@2
       inputs:
-        script: '$(BuildType)\unit_tests.exe'
+        script: '$(BuildType)\bin\unit_tests.exe'
         workingDirectory: 'build'
 
     # - task: CMake@1
