@@ -5,16 +5,16 @@ jobs:
 - job:
   displayName: Windows
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'vs2015-win2012r2'
   strategy:
     matrix:
       64-bit Debug:
         BuildType: Debug
-        CMakeArgs: '-G"Visual Studio 15 2017 Win64"'
+        CMakeArgs: '-G"Visual Studio 14 2015 Win64"'
 
       64-bit Release:
         BuildType: Release
-        CMakeArgs: '-G"Visual Studio 15 2017 Win64"'
+        CMakeArgs: '-G"Visual Studio 14 2015 Win64"'
 
   steps:
   - task: CMake@1
