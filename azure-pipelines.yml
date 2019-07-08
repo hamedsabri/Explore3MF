@@ -25,7 +25,7 @@ jobs:
     - script: mkdir build
     - script: python --version
     - script: python build.py --build_dir build -- install_dir build
-      workingDirectory: build
+      #workingDirectory: build
       displayName: 'Compile'
 
 # - job: 
