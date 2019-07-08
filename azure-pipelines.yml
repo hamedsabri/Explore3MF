@@ -34,7 +34,7 @@ jobs:
 
     - script: dir build
 
-    - script: $(Build.SourcesDirectory)\build\build\bin\Debug\
+    - script: dir $(Build.SourcesDirectory)\build\build\bin\Debug\
 
     - script: $(Build.SourcesDirectory)\build\build\bin\Debug\unit_tests.exe
 
