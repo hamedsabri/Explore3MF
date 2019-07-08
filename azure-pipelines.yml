@@ -1,12 +1,8 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - azure-pipelines
 
-job:
+jobs:
+- job:
   displayName: Windows
   pool:
     vmImage: 'vs2017-win2016'
@@ -19,6 +15,18 @@ job:
       64-bit Release:
         BuildType: Release
         CMakeArgs: '-G"Visual Studio 15 2017 Win64"'
+
+      64-bit Release Windows8Compat:
+        BuildType: Release
+        CMakeArgs: '-G"Visual Studio 15 2017 Win64" -DWIN8COMPAT=TRUE'
+
+      32-bit Debug:
+        BuildType: Debug
+        CMakeArgs: '-G"Visual Studio 15 2017"'
+
+      32-bit Release:
+        BuildType: Release
+        CMakeArgs: '-G"Visual Studio 15 2017"'
 
   steps:
   - task: CMake@1
