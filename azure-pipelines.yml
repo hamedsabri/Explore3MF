@@ -32,19 +32,12 @@ jobs:
     - script: python build.py --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) build
       displayName: 'Compile'
 
-    - script: dir build
-
-    - script: cd $(Build.SourcesDirectory)\Build
-      continueOnError: true
-    
-    - script: dir
-      continueOnError: true
-    
-    - script: cd build
-      continueOnError: true
-    
-    - script: dir
-      continueOnError: true
+    - script: |
+        dir build
+        cd $(Build.SourcesDirectory)\Build
+        dir
+        cd build
+        dir
     
     # - task: BatchScript@1
     #   displayName: 'Unit Tests'
