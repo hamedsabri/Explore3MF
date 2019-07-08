@@ -24,6 +24,7 @@ jobs:
    
   - script: |
       cmake --build . -- /m:8
+    workingDirectory: build
     displayName: 'Build the project'
 
   - script: 'ctest -j 4 -C $(BuildType) -VV'
