@@ -31,6 +31,9 @@ jobs:
     workingDirectory: build
     displayName: 'Run Ctest'
 
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+
 - job: 
   displayName: macOS
   pool:
@@ -57,24 +60,3 @@ jobs:
       ctest -j 4 --output-on-failure -C $(BuildType) -VV
     workingDirectory: build
     displayName: 'Test'
-
-  - task: CMake@1
-    displayName: 'CMake -E chdir . ctest -C Debug -j (Get-WmiObject -class Win32_processor | ft -HideTableHeaders NumberOfCores | Out-String).trim()'
-    inputs:
-      cmakeArgs: '-E chdir . ctest -C Debug -j (Get-WmiObject -class Win32_processor | ft -HideTableHeaders NumberOfCores | Out-String).trim()'
-    continueOnError: true
-
-  - task: CMake@1
-    displayName: 'CMake -E chdir . cpack -C Debug -G 7Z'
-    inputs:
-      cmakeArgs: '-E chdir . cpack -C Debug -G 7Z'
-
-  - task: CopyFiles@2
-    displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
-    inputs:
-      SourceFolder: 'build\_CPack_Packages\win32\7Z\'
-      Contents: '*.7z'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: drop'
