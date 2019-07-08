@@ -18,9 +18,9 @@ jobs:
 
   steps:
   - task: CMake@1
-    displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING'
+    displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
     inputs:
-      cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)  -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING'
+      cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)  -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
   
   - task: CMake@1
     displayName: 'cmake --build . --config $(BuildType)'
