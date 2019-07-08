@@ -6,12 +6,6 @@ jobs:
   displayName: Windows
   pool:
     vmImage: 'vs2015-win2012r2'
-
-    steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '2.7'
-      architecture: 'x64'
   
   strategy:
     matrix:
@@ -24,33 +18,37 @@ jobs:
         CMakeArgs: '-G"Visual Studio 14 2015 Win64"'
 
   steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '2.7'
+        architecture: 'x64'
     - script: python build.py --build_dir -- install_dir build
       workingDirectory: build
       displayName: 'Compile'
 
-- job: 
-  displayName: macOS
-  pool:
-    vmImage: 'macOS-10.14'
-  strategy:
-    matrix:
-      Debug:
-        BuildType: Debug
-      Release:
-        BuildType: Release
+# - job: 
+#   displayName: macOS
+#   pool:
+#     vmImage: 'macOS-10.14'
+#   strategy:
+#     matrix:
+#       Debug:
+#         BuildType: Debug
+#       Release:
+#         BuildType: Release
 
-  steps:
-  - task: CMake@1
-    displayName: 'CMake .. -DCMAKE_BUILD_TYPE=$(BuildType)'
-    inputs:
-      cmakeArgs: '.. -DCMAKE_BUILD_TYPE=$(BuildType)'
+#   steps:
+#   - task: CMake@1
+#     displayName: 'CMake .. -DCMAKE_BUILD_TYPE=$(BuildType)'
+#     inputs:
+#       cmakeArgs: '.. -DCMAKE_BUILD_TYPE=$(BuildType)'
 
-  - script: |
-      make -j 4
-    workingDirectory: build
-    displayName: 'Compile'
+#   - script: |
+#       make -j 4
+#     workingDirectory: build
+#     displayName: 'Compile'
   
-  - script: |
-      ctest -j 4 --output-on-failure -C $(BuildType) -VV
-    workingDirectory: build
-    displayName: 'Test'
+#   - script: |
+#       ctest -j 4 --output-on-failure -C $(BuildType) -VV
+#     workingDirectory: build
+#     displayName: 'Test'
