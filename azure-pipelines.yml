@@ -23,9 +23,9 @@ jobs:
       cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType)'
   
   - task: CMake@1
-    displayName: 'cmake --build . --config $(BuildType) -- /m:8'
+    displayName: 'cmake --build . --config $(BuildType)'
     inputs:
-      cmakeArgs: '.. --build . --config $(BuildType) -- /m:8'
+      cmakeArgs: '.. --build . --config $(BuildType)'
 
   - script: 'ctest -j 4 -C $(BuildType) -VV'
     workingDirectory: build
