@@ -21,8 +21,10 @@ jobs:
   steps:
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: '3.6'
+        versionSpec: '2.7'
         addToPath: true 
+    - script: mkdir build
+    - script: cd build
     - script: python --version
     - script: python build.py --build_dir build -- install_dir build
       workingDirectory: build
