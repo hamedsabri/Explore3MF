@@ -12,8 +12,8 @@ jobs:
       64-bit Debug:
         BuildType: Debug
         CMakeArgs: '"Visual Studio 15 2017 Win64"'
-        BuildFolder: 'C:\BUILD-SRC'
-        InstallFolder: 'C:\BUILD-INSTALL'
+        BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
+        InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
         
       # 64-bit Release:
       #   BuildType: Release
@@ -31,10 +31,9 @@ jobs:
 
     - script: python build.py --build_dir $(BuildFolder) --generator $(CMakeArgs) --build-args=-DCMAKE_BUILD_TYPE=$(BuildType) $(InstallFolder) 
       displayName: 'Compile'
-    
-    - script: cd $(BuildFolder)
-
+  
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+      workingDirectory: $(BuildFolder)
       displayName: 'Run Ctest'
 
 # - job: 
