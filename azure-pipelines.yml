@@ -21,7 +21,6 @@ jobs:
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '2.7'
-        architecture: 'x64'
     - script: python build.py --build_dir build -- install_dir build
       workingDirectory: build
       displayName: 'Compile'
