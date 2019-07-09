@@ -37,9 +37,9 @@ jobs:
       displayName: 'Run Ctest'
     
     - task: CMake@1
-      displayName: 'CMake -E chdir $(BuildFolder) cpack -C Debug -G 7Z'
+      displayName: 'CMake -E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
       inputs:
-        cmakeArgs: '-E chdir $(BuildFolder) cpack -C Debug -G 7Z'
+        cmakeArgs: '-E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
 
     - task: CopyFiles@2
       displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
@@ -84,9 +84,9 @@ jobs:
 #     displayName: 'Run Ctest'
 
 #   - task: CMake@1
-#     displayName: 'CMake -E chdir $(BuildFolder) cpack -C Debug -G 7Z'
+#     displayName: 'CMake -E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
 #     inputs:
-#       cmakeArgs: '-E chdir $(BuildFolder) cpack -C Debug -G 7Z'
+#       cmakeArgs: '-E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
 
 #   - task: CopyFiles@2
 #     displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
