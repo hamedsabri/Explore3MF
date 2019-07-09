@@ -50,7 +50,6 @@ jobs:
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact: Windows Artifact'
-      parallel: true
 
 - job: 
   displayName: MacOSX
@@ -98,4 +97,3 @@ jobs:
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: MacOSX Artifact'
-    parallel: true
