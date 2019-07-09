@@ -13,7 +13,7 @@ macro(fetch_googletest _download_module_path _download_root)
 
     execute_process(
         COMMAND
-            "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+            "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" . "-DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING" "-DGTEST_FORCE_SHARED_CRT=TRUE"
         WORKING_DIRECTORY
             ${_download_root}
         )
