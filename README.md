@@ -1,6 +1,6 @@
 |               | azure-pipelines |
 | -----         | --------------- |
-| Windows/MacOS | [![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/hamedsabri.Explore3MF?branchName=azure-pipelines)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=1&branchName=azure-pipelines) |
+| Windows/MacOS | [![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/Explore3MF-Pipeline?branchName=azure-pipelines)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=5&branchName=azure-pipelines) |
 
 ## Explore3MF
 
