@@ -51,8 +51,8 @@ jobs:
 
       64-bit Release:
         BuildType: RelWithDebInfo
-        BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
-        InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
+        BuildFolder: '$(Build.ArtifactStagingDirectory)/build'
+        InstallFolder: '$(Build.ArtifactStagingDirectory)/install'
         Variant: '--build-relwithdebug'
 
   steps:
