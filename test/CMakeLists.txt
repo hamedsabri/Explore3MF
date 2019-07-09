@@ -10,9 +10,6 @@ target_link_libraries(
     gtest_main
 )
 
-add_test(
-  NAME
-    test
-  COMMAND
-    ${TARGET_NAME}
+add_test( NAME ${TARGET_NAME} 
+		  COMMAND $<TARGET_FILE:${TARGET_NAME}>
 )
