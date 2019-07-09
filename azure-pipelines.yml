@@ -2,64 +2,71 @@ trigger:
 - azure-pipelines
 
 jobs:
-- job:
-  displayName: Windows
-  pool:
-    vmImage: 'vs2017-win2016'
+# - job:
+#   displayName: Windows
+#   pool:
+#     vmImage: 'vs2017-win2016'
   
+  # strategy:
+  #   matrix:
+      # 64-bit Debug:
+      #   BuildType: Debug
+      #   CMakeArgs: '"Visual Studio 15 2017 Win64"'
+      #   BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
+      #   InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
+      #   Variant: '--build-debug'
+
+  #     64-bit Release:
+  #       BuildType: RelWithDebInfo
+  #       CMakeArgs: '"Visual Studio 15 2017 Win64"'
+  #       BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
+  #       InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
+  #       Variant: '--build-relwithdebug'
+
+  # steps:
+  #   - task: UsePythonVersion@0
+  #     inputs:
+  #       versionSpec: '2.7'
+  #       addToPath: true 
+
+  #   - script: python build.py $(Variant) --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
+  #     displayName: 'configure, build, install'
+      
+  #   - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+  #     workingDirectory: $(BuildFolder)
+  #     displayName: 'Run Ctest'
+
+- job: 
+  displayName: MacOSX
+  pool:
+    vmImage: 'macOS-10.14'
+
   strategy:
     matrix:
-      64-bit Debug:
-        BuildType: Debug
-        CMakeArgs: '"Visual Studio 15 2017 Win64"'
-        BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
-        InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
-        Variant: '--build-debug'
+      # 64-bit Debug:
+      #   BuildType: Debug
+      #   BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
+      #   InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
+      #   Variant: '--build-debug'
 
       64-bit Release:
         BuildType: RelWithDebInfo
-        CMakeArgs: '"Visual Studio 15 2017 Win64"'
         BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
         InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
         Variant: '--build-relwithdebug'
 
   steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '2.7'
-        addToPath: true 
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '2.7'
+      addToPath: true 
 
-    - script: python build.py $(Variant) --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
-      displayName: 'compile, build, install'
-      
-    - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: $(BuildFolder)
-      displayName: 'Run Ctest'
+  - script: python build.py $(Variant) --build_dir $(BuildFolder) $(InstallFolder)
+    displayName: 'configure, build, install'
 
-# - job: 
-#   displayName: macOS
-#   pool:
-#     vmImage: 'macOS-10.14'
-#   strategy:
-#     matrix:
-#       Debug:
-#         BuildType: Debug
-#       Release:
-#         BuildType: Release
+  - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+    workingDirectory: $(BuildFolder)
+    displayName: 'Run Ctest'
 
-#   steps:
-#   - task: CMake@1
-#     displayName: 'CMake .. -DCMAKE_BUILD_TYPE=$(BuildType)'
-#     inputs:
-#       cmakeArgs: '.. -DCMAKE_BUILD_TYPE=$(BuildType)'
 
-#   - script: |
-#       make -j 4
-#     workingDirectory: build
-#     displayName: 'Compile'
-  
-#   - script: |
-#       ctest -j 4 --output-on-failure -C $(BuildType) -VV
-#     workingDirectory: build
-#     displayName: 'Test'
 
