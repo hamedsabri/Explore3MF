@@ -246,7 +246,7 @@ def RunCMake(context, force, extraArgs=None):
         if IsVisualStudio2017OrGreater():
             generator = "Visual Studio 15 2017 Win64"
         else:
-            generator = "Visual Studio 15 2017 Win64"
+            generator = "Visual Studio 14 2015 Win64"
 
     if generator is not None:
         generator = '-G "{gen}"'.format(gen=generator)

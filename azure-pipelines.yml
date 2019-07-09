@@ -7,15 +7,15 @@ jobs:
   pool:
     vmImage: 'vs2017-win2016'
   
-  # strategy:
-  #   matrix:
-  #     64-bit Debug:
-  #       BuildType: Debug
-  #       CMakeArgs: '-G"Visual Studio 14 2015 Win64"'
+  strategy:
+    matrix:
+      64-bit Debug:
+        BuildType: Debug
+        CMakeArgs: '"Visual Studio 15 2017 Win64"'
 
-  #     64-bit Release:
-  #       BuildType: Release
-  #       CMakeArgs: '-G"Visual Studio 14 2015 Win64"'
+      # 64-bit Release:
+      #   BuildType: Release
+      #   CMakeArgs: '"Visual Studio 14 2015 Win64"'
 
   steps:
     - task: UsePythonVersion@0
@@ -24,7 +24,7 @@ jobs:
         addToPath: true 
     - script: mkdir build
     - script: python --version
-    - script: python build.py C:\build
+    - script: python build.py --generator $(CMakeArgs) C:\build
       displayName: 'Compile'
 
 # - job: 
