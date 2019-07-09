@@ -9,10 +9,9 @@ target_link_libraries(
     gtest_main
 )
 
-message("!!!!!!!!!!!!" ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 add_test(
   NAME
     unit
   COMMAND
-    ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/unit_tests
+    ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/Debug/unit_tests
 )
