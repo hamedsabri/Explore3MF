@@ -2,83 +2,98 @@ trigger:
 - azure-pipelines
 
 jobs:
-# - job:
-#   displayName: Windows
-#   pool:
-#     vmImage: 'vs2017-win2016'
-  
-  # strategy:
-  #   matrix:
-      # 64-bit Debug:
-      #   BuildType: Debug
-      #   CMakeArgs: '"Visual Studio 15 2017 Win64"'
-      #   BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
-      #   InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
-      #   Variant: '--build-debug'
-
-  #     64-bit Release:
-  #       BuildType: RelWithDebInfo
-  #       CMakeArgs: '"Visual Studio 15 2017 Win64"'
-  #       BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
-  #       InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
-  #       Variant: '--build-relwithdebug'
-
-  # steps:
-  #   - task: UsePythonVersion@0
-  #     inputs:
-  #       versionSpec: '2.7'
-  #       addToPath: true 
-
-  #   - script: python build.py $(Variant) --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
-  #     displayName: 'configure, build, install'
-      
-  #   - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-  #     workingDirectory: $(BuildFolder)
-  #     displayName: 'Run Ctest'
-
-- job: 
-  displayName: MacOSX
+- job:
+  displayName: Windows
   pool:
-    vmImage: 'macOS-10.14'
-
+    vmImage: 'vs2017-win2016'
+  
   strategy:
     matrix:
-      # 64-bit Debug:
-      #   BuildType: Debug
-      #   BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
-      #   InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
-      #   Variant: '--build-debug'
+      64-bit Debug:
+        BuildType: Debug
+        CMakeArgs: '"Visual Studio 15 2017 Win64"'
+        BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
+        InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
+        Variant: '--build-debug'
 
       64-bit Release:
         BuildType: RelWithDebInfo
-        BuildFolder: '$(Build.ArtifactStagingDirectory)/build'
-        InstallFolder: '$(Build.ArtifactStagingDirectory)/install'
+        CMakeArgs: '"Visual Studio 15 2017 Win64"'
+        BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
+        InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
         Variant: '--build-relwithdebug'
 
   steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '2.7'
-      addToPath: true 
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '2.7'
+        addToPath: true 
 
-  - script: python build.py $(Variant) --build_dir $(BuildFolder) $(InstallFolder)
-    displayName: 'configure, build, install'
+    - script: python build.py $(Variant) --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
+      displayName: 'configure, build, install'
+      
+    - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+      workingDirectory: $(BuildFolder)
+      displayName: 'Run Ctest'
+    
+    - task: CMake@1
+      displayName: 'CMake -E chdir $(BuildFolder) cpack -C Debug -G 7Z'
+      inputs:
+        cmakeArgs: '-E chdir $(BuildFolder) cpack -C Debug -G 7Z'
 
-  - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-    workingDirectory: $(BuildFolder)
-    displayName: 'Run Ctest'
+    - task: CopyFiles@2
+      displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
+      inputs:
+        SourceFolder: '$(BuildFolder)/_CPack_Packages/win64/7Z/'
+        Contents: '*.7z'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-  - task: CMake@1
-    displayName: 'CMake -E chdir $(BuildFolder) cpack -C Debug -G 7Z'
-    inputs:
-      cmakeArgs: '-E chdir $(BuildFolder) cpack -C Debug -G 7Z'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
 
-  - task: CopyFiles@2
-    displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
-    inputs:
-      SourceFolder: '$(BuildFolder)/_CPack_Packages/Darwin/7Z/'
-      Contents: '*.7z'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+# - job: 
+#   displayName: MacOSX
+#   pool:
+#     vmImage: 'macOS-10.14'
 
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: drop'
+#   strategy:
+#     matrix:
+#       # 64-bit Debug:
+#       #   BuildType: Debug
+#       #   BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
+#       #   InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
+#       #   Variant: '--build-debug'
+
+#       64-bit Release:
+#         BuildType: RelWithDebInfo
+#         BuildFolder: '$(Build.ArtifactStagingDirectory)/build'
+#         InstallFolder: '$(Build.ArtifactStagingDirectory)/install'
+#         Variant: '--build-relwithdebug'
+
+#   steps:
+#   - task: UsePythonVersion@0
+#     inputs:
+#       versionSpec: '2.7'
+#       addToPath: true 
+
+#   - script: python build.py $(Variant) --build_dir $(BuildFolder) $(InstallFolder)
+#     displayName: 'configure, build, install'
+
+#   - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
+#     workingDirectory: $(BuildFolder)
+#     displayName: 'Run Ctest'
+
+#   - task: CMake@1
+#     displayName: 'CMake -E chdir $(BuildFolder) cpack -C Debug -G 7Z'
+#     inputs:
+#       cmakeArgs: '-E chdir $(BuildFolder) cpack -C Debug -G 7Z'
+
+#   - task: CopyFiles@2
+#     displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
+#     inputs:
+#       SourceFolder: '$(BuildFolder)/_CPack_Packages/Darwin/7Z/'
+#       Contents: '*.7z'
+#       TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+#   - task: PublishBuildArtifacts@1
+#     displayName: 'Publish Artifact: drop'
