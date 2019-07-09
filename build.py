@@ -283,9 +283,10 @@ def InstallExplore3MF(context, force, buildArgs):
     with CurrentWorkingDirectory(context.srcDir):
         extraArgs = []
 
-        # TODO
+        # TODO: needed for google test when is used with Visual studio generator
         if Windows():
             extraArgs.append('-Dgtest_force_shared_crt=ON')
+            extraArgs.append('-DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING')
 
         extraArgs += buildArgs
 
