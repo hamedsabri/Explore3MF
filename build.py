@@ -230,7 +230,10 @@ def RunCMake(context, force, extraArgs=None):
     srcDir = os.getcwd()
     instDir = (context.installDir if srcDir == context.srcDir
                else srcDir == context.srcDir)
-    buildDir = os.path.join(context.buildDir, os.path.split(srcDir)[1])
+
+    buildDir = context.buildDir
+    Print(buildDir)
+    
     if force and os.path.isdir(buildDir):
         shutil.rmtree(buildDir)
 

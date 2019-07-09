@@ -34,8 +34,10 @@ jobs:
 
     - script: dir $(InstallFolder)
     
+    - script: dir $(BuildFolder)
+    
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: $(BuildFolder)\s
+      workingDirectory: $(BuildFolder)
       displayName: 'Run Ctest'
 
 # - job: 
