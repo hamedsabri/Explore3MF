@@ -3,6 +3,7 @@
 # download and unpack googletest at configure time
 
 macro(fetch_googletest _download_module_path _download_root)
+    message(STATUS "========== Installing GoogleTest ==========")
     set(GOOGLETEST_DOWNLOAD_ROOT ${_download_root})
     configure_file(
         ${_download_module_path}/Googletest-download.cmake
@@ -13,13 +14,13 @@ macro(fetch_googletest _download_module_path _download_root)
 
     execute_process(
         COMMAND
-            "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+            "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM} "-Dgtest_force_shared_crt=ON" .
         WORKING_DIRECTORY
             ${_download_root}
         )
     execute_process(
         COMMAND
-            "${CMAKE_COMMAND}" --build .
+            "${CMAKE_COMMAND}" --build . --config ${CMAKE_BUILD_TYPE}
         WORKING_DIRECTORY
             ${_download_root}
         )
@@ -29,4 +30,5 @@ macro(fetch_googletest _download_module_path _download_root)
         ${_download_root}/googletest-src
         ${_download_root}/googletest-build
         )
+    message(STATUS "========== GoogleTest installed. ==========")
 endmacro()

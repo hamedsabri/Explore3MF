@@ -12,6 +12,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
 set( EXTERNAL_LIBRARIES_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/src/ExternalLibrary )
 
+option(BUILD_TESTS "Build unit tests" ON)
+
 # ---------------------------------------------------------------------------------
 # Cmake Modules
 # ---------------------------------------------------------------------------------
@@ -26,11 +28,14 @@ add_subdirectory( src/Apps/ThreeMFApp )
 # ---------------------------------------------------------------------------------
 # Test
 # ---------------------------------------------------------------------------------
-include(cmake/Googletest.cmake)
-fetch_googletest(
-    ${PROJECT_SOURCE_DIR}/cmake
-    ${PROJECT_BINARY_DIR}/Googletest
-    )
-
-enable_testing()
-add_subdirectory(test)
+if (BUILD_TESTS)
+    # google test
+    include(cmake/Googletest.cmake)
+    fetch_googletest(
+        ${PROJECT_SOURCE_DIR}/cmake
+        ${PROJECT_BINARY_DIR}/Googletest
+        )
+    
+    enable_testing()
+    add_subdirectory(test)
+endif()

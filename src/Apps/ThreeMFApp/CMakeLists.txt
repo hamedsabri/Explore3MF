@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------
 # Project name                                                                  
 # ---------------------------------------------------------------------------------
-get_filename_component(PROJECTNAME ${CMAKE_CURRENT_LIST_DIR} NAME)
+get_filename_component(TARGET_NAME ${CMAKE_CURRENT_LIST_DIR} NAME)
 
 # ---------------------------------------------------------------------------------
 # Include paths                                                                 
@@ -26,9 +26,9 @@ source_group ("source" FILES ${PROJECT_SOURCES})
 # ---------------------------------------------------------------------------------
 # Executable and target include/link libraries                                     
 # ---------------------------------------------------------------------------------
-add_executable( ${PROJECTNAME} ${PROJECT_INCLUDES} ${PROJECT_SOURCES})
+add_executable(${TARGET_NAME} ${PROJECT_INCLUDES} ${PROJECT_SOURCES})
 
-target_include_directories( ${PROJECTNAME} PRIVATE include
+target_include_directories( ${TARGET_NAME} PRIVATE include
 
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Lib3mf/f4d873e5
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/include
@@ -40,11 +40,11 @@ target_include_directories( ${PROJECTNAME} PRIVATE include
 )
 
 if (WIN32)
-    target_link_libraries( ${PROJECTNAME} lib3MF thirdPartyLibs )
+    target_link_libraries( ${TARGET_NAME} lib3MF thirdPartyLibs )
 elseif(APPLE)
-    target_link_libraries( ${PROJECTNAME} ${MACOS_LIBRARIES} lib3MF thirdPartyLibs )
+    target_link_libraries( ${TARGET_NAME} ${MACOS_LIBRARIES} lib3MF thirdPartyLibs )
 elseif(UNIX AND NOT APPLE)
-    target_link_libraries( ${PROJECTNAME} lib3MF uuid thirdPartyLibs glfw ${GLFW_LIBRARIES} ${GTK3_LIBRARIES})
+    target_link_libraries( ${TARGET_NAME} lib3MF uuid thirdPartyLibs glfw ${GLFW_LIBRARIES} ${GTK3_LIBRARIES})
 endif()
 
 # ---------------------------------------------------------------------------------
@@ -52,3 +52,17 @@ endif()
 # ---------------------------------------------------------------------------------
 set ( RESOURCE_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFApp/Resources )
 add_definitions(-DRESOURCEDIR_PATH="${RESOURCE_DIR_PATH}/")
+
+# ---------------------------------------------------------------------------------
+# INSTALL                              
+# ---------------------------------------------------------------------------------
+install(TARGETS
+    ${TARGET_NAME}
+    LIBRARY
+        DESTINATION Explore3MF/bin
+    RUNTIME
+        DESTINATION Explore3MF/bin
+)
+if(MSVC)
+    install(FILES $<TARGET_PDB_FILE:${TARGET_NAME}> DESTINATION Explore3MF/bin OPTIONAL)
+endif()
