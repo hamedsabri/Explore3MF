@@ -6,7 +6,7 @@ Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF
 |  Build Status |
 |-------------- |
 |![Win-x64](doc/images/win.png) **Windows x64** ![macOS-x64](doc/images/apple.png) **macOS** ![Linux-x64](doc/images/ubuntu.png) **Linux x64** |
-| [![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/Pipeline-Explore3D?branchName=azure-pipelines)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=7&branchName=azure-pipelines)|
+| [![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/Explore3D-PipeLine?branchName=master)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=9&branchName=master)|
 
 ## Screenshot
 
