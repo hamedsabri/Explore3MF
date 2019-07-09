@@ -4,13 +4,13 @@
 cmake_minimum_required(VERSION 3.5)
 project(Explore3D)
 
-set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
-set( EXTERNAL_LIBRARIES_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/src/ExternalLibrary )
-set_property( GLOBAL PROPERTY USE_FOLDERS ON )
+# place binaries and libraries according to GNU standards
+include(GNUInstallDirs)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
-if( NOT CMAKE_BUILD_TYPE )
-   set( CMAKE_BUILD_TYPE Debug )
-endif()
+set( EXTERNAL_LIBRARIES_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/src/ExternalLibrary )
 
 # ---------------------------------------------------------------------------------
 # Cmake Modules
@@ -22,3 +22,15 @@ include( ${CMAKE_SOURCE_DIR}/cmake/ExternalLibraries_Setup.cmake )
 # ThreeMFApp
 # ---------------------------------------------------------------------------------
 add_subdirectory( src/Apps/ThreeMFApp )
+
+# ---------------------------------------------------------------------------------
+# Test
+# ---------------------------------------------------------------------------------
+include(cmake/Googletest.cmake)
+fetch_googletest(
+    ${PROJECT_SOURCE_DIR}/cmake
+    ${PROJECT_BINARY_DIR}/Googletest
+    )
+
+enable_testing()
+add_subdirectory(test)
