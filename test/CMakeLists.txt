@@ -1,17 +1,18 @@
+set(TARGET_NAME unit_tests)
 add_executable( 
-	unit_tests
+	${TARGET_NAME}
     example_add.cpp
     example_subtract.cpp
 )
 
 target_link_libraries( 
-	unit_tests
+	${TARGET_NAME}
     gtest_main
 )
 
 add_test(
   NAME
-    unit
+    test
   COMMAND
-    ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/Debug/unit_tests
+    ${TARGET_NAME}
 )
