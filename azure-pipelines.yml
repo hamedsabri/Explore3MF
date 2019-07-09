@@ -5,7 +5,7 @@ jobs:
 - job:
   displayName: Windows
   pool:
-    vmImage: 'vs2017-win2016' # vs2015-win2012r2
+    vmImage: 'vs2017-win2016'
   
   strategy:
     matrix:
@@ -15,12 +15,13 @@ jobs:
         BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
         InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
         Variant: '--build-debug'
-        
-      # 64-bit Release:
-      #   BuildType: Release
-      #   CMakeArgs: '"Visual Studio 15 2017 Win64"'
-      #   BuildFolder: 'C:\BUILD-SRC'
-      #   InstallFolder: 'C:\BUILD-INSTALL'
+
+      64-bit Release:
+        BuildType: RelWithDebInfo
+        CMakeArgs: '"Visual Studio 15 2017 Win64"'
+        BuildFolder: '$(Build.ArtifactStagingDirectory)\build'
+        InstallFolder: '$(Build.ArtifactStagingDirectory)\install'
+        Variant: '--build-relwithdebug'
 
   steps:
     - task: UsePythonVersion@0
@@ -28,33 +29,12 @@ jobs:
         versionSpec: '2.7'
         addToPath: true 
 
-    - script: python build.py $(Variant) --generator $(CMakeArgs)  build
-      displayName: 'Compile'
-    
+    - script: python build.py $(Variant) --build_dir ${BuildFolder} --generator $(CMakeArgs) ${InstallFolder}
+      displayName: 'compile, build, install'
+      
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-      workingDirectory: build\build
+      workingDirectory: ${BuildFolder}
       displayName: 'Run Ctest'
-
-    - script: |
-       cd $(Build.SourcesDirectory)\Build
-       cd build
-       cd bin
-       dir
-
-  # steps:
-  # - task: CMake@1
-  #   displayName: 'CMake .. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
-  #   inputs:
-  #     cmakeArgs: '.. $(CMakeArgs) -DCMAKE_BUILD_TYPE=$(BuildType) -DCMAKE_CXX_FLAGS=/D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING -Dgtest_force_shared_crt=TRUE'
-
-  # - task: CMake@1
-  #   displayName: 'cmake --build . --config $(BuildType)'
-  #   inputs:
-  #     cmakeArgs: '--build . --config $(BuildType)'
-
-  # - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
-  #   workingDirectory: build
-  #   displayName: 'Run Ctest'
 
 # - job: 
 #   displayName: macOS
