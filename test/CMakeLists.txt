@@ -9,6 +9,7 @@ target_link_libraries(
     gtest_main
 )
 
+message("!!!!!!!!!!!!" ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 add_test(
   NAME
     unit
