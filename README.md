@@ -3,11 +3,11 @@
 Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF) + Lib3MF library.
 
 ## Status
-|   | Build & Test |
-|---|:-----:|
-|![Win-x64](doc/images/win.png) **Windows x64**|[![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/Explore3MF-Pipeline?branchName=azure-pipelines)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=5&branchName=azure-pipelines)| 
-|![macOS-x64](doc/images/apple.png) **macOS**|[![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/Explore3MF-Pipeline?branchName=azure-pipelines)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=5&branchName=azure-pipelines)| 
-|![Linux-x64](doc/images/ubuntu.png) **Linux x64**|[![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/Explore3MF-Pipeline?branchName=azure-pipelines)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=5&branchName=azure-pipelines)|
+|  Build Status |
+|-------------- |
+|![Win-x64](doc/images/win.png) **Windows x64** ![macOS-x64](doc/images/apple.png) **macOS** ![Linux-x64](doc/images/ubuntu.png) **Linux x64** |
+| [![Build Status](https://dev.azure.com/homemadecode3d/homemadecode3d/_apis/build/status/Explore3MF-Pipeline?branchName=azure-pipelines)](https://dev.azure.com/homemadecode3d/homemadecode3d/_build/latest?definitionId=5&branchName=azure-pipelines)|
+
 ## Screenshot
 
 ![screenshot](https://user-images.githubusercontent.com/283793/42958954-23fe9532-8b55-11e8-8f85-2120209c719a.png)
