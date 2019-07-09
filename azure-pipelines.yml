@@ -6,7 +6,7 @@ jobs:
   displayName: Windows
   pool:
     vmImage: 'vs2017-win2016'
-  
+
   strategy:
     matrix:
       64-bit Debug:
@@ -27,29 +27,33 @@ jobs:
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '2.7'
-        addToPath: true 
+        addToPath: true
+      displayName: Use python2.7!
 
     - script: python build.py $(Variant) --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
-      displayName: 'configure, build, install'
+      displayName: 'Run build script!'
       
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
       workingDirectory: $(BuildFolder)
-      displayName: 'Run Ctest'
+      displayName: 'Run ctest!'
     
     - task: CMake@1
-      displayName: 'CMake -E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
+      displayName: 'Run cpack and create a 7Z!'
       inputs:
         cmakeArgs: '-E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
 
     - task: CopyFiles@2
-      displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
+      displayName: 'Copy 7Z to artifact staging directory!'
       inputs:
         SourceFolder: '$(BuildFolder)/_CPack_Packages/win64/7Z/'
         Contents: '*.7z'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: Windows Artifact'
+      displayName: 'Publish artifact!'
+      inputs:
+        artifactName: 'Windows-Artifact'
+        parallel: true
 
 - job: 
   displayName: MacOSX
@@ -75,28 +79,32 @@ jobs:
     inputs:
       versionSpec: '2.7'
       addToPath: true 
+    displayName: Use python2.7!
 
   - script: python build.py $(Variant) --build_dir $(BuildFolder) $(InstallFolder)
-    displayName: 'configure, build, install'
+    displayName: 'Run build script!'
 
   - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
     workingDirectory: $(BuildFolder)
-    displayName: 'Run Ctest'
+    displayName: 'Run ctest!'
 
   - task: CMake@1
-    displayName: 'CMake -E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
+    displayName: 'Run cpack and create a 7Z!'
     inputs:
       cmakeArgs: '-E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
 
   - task: CopyFiles@2
-    displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
+    displayName: 'Copy 7Z to artifact staging directory!'
     inputs:
       SourceFolder: '$(BuildFolder)/_CPack_Packages/Darwin/7Z/'
       Contents: '*.7z'
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: MacOSX Artifact'
+    displayName: 'Publish artifact!'
+    inputs:
+        artifactName: 'MacOSX-Artifact'
+        parallel: true
 
 - job:
   displayName: Linux
@@ -131,25 +139,29 @@ jobs:
     inputs:
       versionSpec: '2.7'
       addToPath: true 
+    displayName: Use python2.7!
 
   - script: python build.py $(Variant) --build_dir $(BuildFolder) $(InstallFolder)
-    displayName: 'configure, build, install'
+    displayName: 'Run build script!'
 
   - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
     workingDirectory: $(BuildFolder)
-    displayName: 'Run Ctest'
+    displayName: 'Run ctest!'
 
   - task: CMake@1
-    displayName: 'CMake -E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
+    displayName: 'Run cpack and create a 7Z!'
     inputs:
       cmakeArgs: '-E chdir $(BuildFolder) cpack -C $(BuildType) -G 7Z'
 
   - task: CopyFiles@2
-    displayName: 'Copy CPack Files to: $(Build.ArtifactStagingDirectory)'
+    displayName: 'Copy 7Z to artifact staging directory!'
     inputs:
       SourceFolder: '$(BuildFolder)/_CPack_Packages/Linux/7Z/'
       Contents: '*.7z'
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
+ 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: Debian Artifact'
+    displayName: 'Publish artifact!'
+    inputs:
+        artifactName: 'Debian-Artifact'
+        parallel: true
