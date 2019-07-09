@@ -15,8 +15,8 @@ set( EXTERNAL_LIBRARIES_DIRECTORY_PATH ${CMAKE_SOURCE_DIR}/src/ExternalLibrary )
 # ---------------------------------------------------------------------------------
 # Cmake Modules
 # ---------------------------------------------------------------------------------
-#include( ${CMAKE_SOURCE_DIR}/cmake/Compiler_Setup.cmake )
-#include( ${CMAKE_SOURCE_DIR}/cmake/ExternalLibraries_Setup.cmake )
+include( ${CMAKE_SOURCE_DIR}/cmake/Compiler_Setup.cmake )
+include( ${CMAKE_SOURCE_DIR}/cmake/ExternalLibraries_Setup.cmake )
 
 # ---------------------------------------------------------------------------------
 # ThreeMFApp
