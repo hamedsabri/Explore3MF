@@ -149,11 +149,14 @@ def GetPythonInfo():
 
 def GetCPUCount():
     try:
+        print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        print multiprocessing.cpu_count()
+        print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         return multiprocessing.cpu_count()
     except NotImplementedError:
         return 1
 
-def Run(cmd, logCommandOutput=True):
+def Run(cmd, logCommandOutput=False):
     """Run the specified command in a subprocess."""
     PrintInfo('Running "{cmd}"'.format(cmd=cmd))
 
