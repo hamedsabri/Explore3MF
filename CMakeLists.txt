@@ -2,7 +2,7 @@
 # Projects Settings
 # ---------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.5)
-project(Explore3D)
+project(ThreeMFViewer)
 
 # place binaries and libraries according to GNU standards
 include(GNUInstallDirs)
@@ -36,6 +36,20 @@ if (BUILD_TESTS)
         ${PROJECT_BINARY_DIR}/Googletest
         )
     
+    include(CTest)
     enable_testing()
     add_subdirectory(test)
 endif()
+
+# ---------------------------------------------------------------------------------
+# PACKAGE
+# ---------------------------------------------------------------------------------
+set(CPACK_PACKAGE_NAME "ThreeMFViewer")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "ThreeMFViewer - Package")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Package")
+
+include(CPack)
