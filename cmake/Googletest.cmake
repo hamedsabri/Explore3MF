@@ -29,6 +29,6 @@ macro(fetch_googletest _download_module_path _download_root)
     add_subdirectory(
         ${_download_root}/googletest-src
         ${_download_root}/googletest-build
-        )
+        EXCLUDE_FROM_ALL )
     message(STATUS "========== GoogleTest installed. ==========")
 endmacro()

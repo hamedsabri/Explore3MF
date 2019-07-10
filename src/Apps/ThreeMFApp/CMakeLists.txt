@@ -69,7 +69,7 @@ target_link_libraries(${TARGET_NAME}
 # ---------------------------------------------------------------------------------
 # RESOURCEDIR_PATH definition to be used in C++                                     
 # ---------------------------------------------------------------------------------
-set ( RESOURCE_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFApp/Resources )
+set ( RESOURCE_DIR_PATH Resources )
 add_definitions(-DRESOURCEDIR_PATH="${RESOURCE_DIR_PATH}/")
 
 # ---------------------------------------------------------------------------------
@@ -80,6 +80,8 @@ install(
         Resources
     DESTINATION
         Explore3MF/bin
+    DESTINATION
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
 install(TARGETS
