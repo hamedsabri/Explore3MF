@@ -49,7 +49,8 @@ jobs:
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
     - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact: drop'
+      displayName: 'Publish Artifact: Windows Artifact'
+      parallel: true
 
 - job: 
   displayName: MacOSX
@@ -96,4 +97,5 @@ jobs:
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: Download Package'
+    displayName: 'Publish Artifact: MacOSX Artifact'
+    parallel: true

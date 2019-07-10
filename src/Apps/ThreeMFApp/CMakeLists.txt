@@ -77,9 +77,14 @@ add_definitions(-DRESOURCEDIR_PATH="${RESOURCE_DIR_PATH}/")
 # ---------------------------------------------------------------------------------
 install(
     DIRECTORY
-        Resources
+        ${CMAKE_CURRENT_SOURCE_DIR}/Resources
     DESTINATION
         Explore3MF/bin
+)
+
+install(
+    DIRECTORY
+        ${CMAKE_CURRENT_SOURCE_DIR}/Resources
     DESTINATION
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
