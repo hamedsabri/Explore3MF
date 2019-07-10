@@ -11,13 +11,17 @@ include_directories( ${CMAKE_CURRENT_LIST_DIR} Core )
 # ---------------------------------------------------------------------------------
 # Add source files                                                                
 # ---------------------------------------------------------------------------------
-file (GLOB_RECURSE PROJECT_INCLUDES *.hpp
-                                    *.h)
+file (GLOB_RECURSE PROJECT_INCLUDES 
+    *.hpp
+    *.h
+)
 
-file (GLOB_RECURSE PROJECT_SOURCES *.cpp
-                                   *.cxx
-                                   *.cc
-                                   *.c)
+file (GLOB_RECURSE PROJECT_SOURCES 
+    *.cpp
+    *.cxx
+    *.cc
+    *.c
+)
 
 # define a grouping for files in IDE
 source_group ("include" FILES ${PROJECT_INCLUDES})
@@ -28,7 +32,7 @@ source_group ("source" FILES ${PROJECT_SOURCES})
 # ---------------------------------------------------------------------------------
 add_executable(${TARGET_NAME} ${PROJECT_INCLUDES} ${PROJECT_SOURCES})
 
-target_include_directories( ${TARGET_NAME} PRIVATE include
+target_include_directories(${TARGET_NAME} PRIVATE include
 
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Lib3mf/f4d873e5
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/include
@@ -39,13 +43,28 @@ target_include_directories( ${TARGET_NAME} PRIVATE include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/NativeFileDialog/5cfe5002
 )
 
-if (WIN32)
-    target_link_libraries( ${TARGET_NAME} lib3MF thirdPartyLibs )
-elseif(APPLE)
-    target_link_libraries( ${TARGET_NAME} ${MACOS_LIBRARIES} lib3MF thirdPartyLibs )
+
+set( libraries
+     lib3MF
+     thirdPartyLibs
+)
+
+if(APPLE)
+    list(APPEND libraries
+        ${MACOS_LIBRARIES}
+    )
 elseif(UNIX AND NOT APPLE)
-    target_link_libraries( ${TARGET_NAME} lib3MF uuid thirdPartyLibs glfw ${GLFW_LIBRARIES} ${GTK3_LIBRARIES})
+    list(APPEND libraries
+        uuid
+        glfw
+        ${GLFW_LIBRARIES} 
+        ${GTK3_LIBRARIES}
+    )
 endif()
+
+target_link_libraries(${TARGET_NAME} 
+    ${libraries}
+)
 
 # ---------------------------------------------------------------------------------
 # RESOURCEDIR_PATH definition to be used in C++                                     
@@ -54,8 +73,15 @@ set ( RESOURCE_DIR_PATH ${CMAKE_SOURCE_DIR}/src/Apps/ThreeMFApp/Resources )
 add_definitions(-DRESOURCEDIR_PATH="${RESOURCE_DIR_PATH}/")
 
 # ---------------------------------------------------------------------------------
-# INSTALL                              
+# INSTALL
 # ---------------------------------------------------------------------------------
+install(
+    DIRECTORY
+        ${RESOURCE_DIR_PATH}
+    DESTINATION
+        Explore3MF/bin
+)
+
 install(TARGETS
     ${TARGET_NAME}
     LIBRARY
@@ -63,6 +89,7 @@ install(TARGETS
     RUNTIME
         DESTINATION Explore3MF/bin
 )
+
 if(MSVC)
     install(FILES $<TARGET_PDB_FILE:${TARGET_NAME}> DESTINATION Explore3MF/bin OPTIONAL)
 endif()

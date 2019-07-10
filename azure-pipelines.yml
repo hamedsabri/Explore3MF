@@ -60,8 +60,8 @@ jobs:
     matrix:
       64-bit Debug:
         BuildType: Debug
-        BuildFolder: '$(Build.BinariesDirectory)\build'
-        InstallFolder: '$(Build.BinariesDirectory)\install'
+        BuildFolder: '$(Build.BinariesDirectory)/build'
+        InstallFolder: '$(Build.BinariesDirectory)/install'
         Variant: '--build-debug'
 
       64-bit Release:
