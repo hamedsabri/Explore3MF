@@ -149,9 +149,6 @@ def GetPythonInfo():
 
 def GetCPUCount():
     try:
-        print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        print multiprocessing.cpu_count()
-        print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         return multiprocessing.cpu_count()
     except NotImplementedError:
         return 1
