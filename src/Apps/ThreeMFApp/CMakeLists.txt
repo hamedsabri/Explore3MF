@@ -77,7 +77,7 @@ add_definitions(-DRESOURCEDIR_PATH="${RESOURCE_DIR_PATH}/")
 # ---------------------------------------------------------------------------------
 install(
     DIRECTORY
-        ${RESOURCE_DIR_PATH}
+        Resources
     DESTINATION
         Explore3MF/bin
 )
