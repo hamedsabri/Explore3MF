@@ -112,17 +112,13 @@ jobs:
     vmImage: 'ubuntu-16.04'
   strategy:
     matrix:
-      GCC-7 Debug:
-        CC: gcc-7
-        CXX: g++-7
+      64-bit Debug:
         BuildType: Debug
         BuildFolder: '$(Build.BinariesDirectory)/build'
         InstallFolder: '$(Build.BinariesDirectory)/install'
         Variant: '--build-debug'
 
-      GCC-7 Release:
-        CC: gcc-7
-        CXX: g++-7
+      64-bit Release:
         BuildType: Release
         BuildFolder: '$(Build.BinariesDirectory)/build'
         InstallFolder: '$(Build.BinariesDirectory)/install'
