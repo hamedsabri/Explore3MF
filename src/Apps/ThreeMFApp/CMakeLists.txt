@@ -23,6 +23,11 @@ file (GLOB_RECURSE PROJECT_SOURCES
     *.c
 )
 
+file (GLOB_RECURSE PROJECT_SHADERS 
+    *.frag
+    *.vert
+)
+
 # define a grouping for files in IDE
 source_group ("include" FILES ${PROJECT_INCLUDES})
 source_group ("source" FILES ${PROJECT_SOURCES})
@@ -30,7 +35,11 @@ source_group ("source" FILES ${PROJECT_SOURCES})
 # ---------------------------------------------------------------------------------
 # Executable and target include/link libraries 
 # ---------------------------------------------------------------------------------
-add_executable(${TARGET_NAME} ${PROJECT_INCLUDES} ${PROJECT_SOURCES})
+add_executable(${TARGET_NAME} 
+    ${PROJECT_INCLUDES} 
+    ${PROJECT_SOURCES}
+    ${PROJECT_SHADERS}
+)
 
 target_include_directories(${TARGET_NAME} PRIVATE include
 
@@ -64,12 +73,6 @@ endif()
 target_link_libraries(${TARGET_NAME} 
     ${libraries}
 )
-
-# ---------------------------------------------------------------------------------
-# RESOURCEDIR_PATH definition to be used in C++
-# ---------------------------------------------------------------------------------
-set ( RESOURCE_DIR_PATH Resources )
-add_definitions(-DRESOURCEDIR_PATH="${RESOURCE_DIR_PATH}/")
 
 # ---------------------------------------------------------------------------------
 # INSTALL
