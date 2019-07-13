@@ -11,6 +11,8 @@
 
 #include <nfd.h>
 
+#define RESOURCE_PATH "./Resources/"
+
 using namespace E3D;
 
 namespace
@@ -31,17 +33,17 @@ MainApp::~MainApp()
 void
 MainApp::init()
 {
-    windowGL()->setWindowIcon(RESOURCEDIR_PATH "Icons/window_icon.png");
+    windowGL()->setWindowIcon(RESOURCE_PATH "Icons/window_icon.png");
 
     m_camera = std::make_shared<Camera>( glm::vec3(0.0f, 8.0f, 12.0f),
                                          glm::vec3(0.0f, 0.0f, 0.0f), 
                                          width(), height());
 
-    m_vertexShader = std::make_shared<ShaderLoaderGL>(RESOURCEDIR_PATH "Shaders/vertexColorShader.vert",
-                                                      RESOURCEDIR_PATH "Shaders/vertexColorShader.frag");
+    m_vertexShader = std::make_shared<ShaderLoaderGL>(RESOURCE_PATH "Shaders/vertexColorShader.vert",
+                                                      RESOURCE_PATH "Shaders/vertexColorShader.frag");
 
-    m_facetedShader = std::make_shared<ShaderLoaderGL>(RESOURCEDIR_PATH "Shaders/facetedShader.vert",
-                                                       RESOURCEDIR_PATH "Shaders/facetedShader.frag");
+    m_facetedShader = std::make_shared<ShaderLoaderGL>(RESOURCE_PATH "Shaders/facetedShader.vert",
+                                                       RESOURCE_PATH "Shaders/facetedShader.frag");
 
     m_worldGrid = std::make_unique<WorldGrid>();
 }
