@@ -13,14 +13,14 @@ jobs:
         BuildType: Debug
         CMakeArgs: '"Visual Studio 15 2017 Win64"'
         BuildFolder: '$(Build.BinariesDirectory)\build'
-        InstallFolder: '$(Build.BinariesDirectory)\install'
+        InstallFolder: '$(Build.BinariesDirectory)\install\$(BuildType)'
         Variant: '--build-debug'
 
       64-bit Release:
         BuildType: RelWithDebInfo
         CMakeArgs: '"Visual Studio 15 2017 Win64"'
         BuildFolder: '$(Build.BinariesDirectory)\build'
-        InstallFolder: '$(Build.BinariesDirectory)\install'
+        InstallFolder: '$(Build.BinariesDirectory)\install\$(BuildType)'
         Variant: '--build-relwithdebug'
 
   steps:
@@ -65,13 +65,13 @@ jobs:
       64-bit Debug:
         BuildType: Debug
         BuildFolder: '$(Build.BinariesDirectory)/build'
-        InstallFolder: '$(Build.BinariesDirectory)/install'
+        InstallFolder: '$(Build.BinariesDirectory)/install/$(BuildType)'
         Variant: '--build-debug'
 
       64-bit Release:
         BuildType: RelWithDebInfo
         BuildFolder: '$(Build.BinariesDirectory)/build'
-        InstallFolder: '$(Build.BinariesDirectory)/install'
+        InstallFolder: '$(Build.BinariesDirectory)/install/$(BuildType)'
         Variant: '--build-relwithdebug'
 
   steps:
@@ -115,13 +115,13 @@ jobs:
       64-bit Debug:
         BuildType: Debug
         BuildFolder: '$(Build.BinariesDirectory)/build'
-        InstallFolder: '$(Build.BinariesDirectory)/install'
+        InstallFolder: '$(Build.BinariesDirectory)/install/$(BuildType)'
         Variant: '--build-debug'
 
       64-bit Release:
         BuildType: Release
         BuildFolder: '$(Build.BinariesDirectory)/build'
-        InstallFolder: '$(Build.BinariesDirectory)/install'
+        InstallFolder: '$(Build.BinariesDirectory)/install/$(BuildType)'
         Variant: '--build-relwithdebug'
 
   steps:
