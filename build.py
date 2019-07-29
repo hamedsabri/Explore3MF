@@ -228,12 +228,9 @@ def RunCMake(context, force, extraArgs=None):
     # Create a directory for out-of-source builds in the build directory
     # using the name of the current working directory.
     srcDir = os.getcwd()
-    instDir = (context.installDir if srcDir == context.srcDir
-               else srcDir == context.srcDir)
+    instDir = os.path.join(context.instDir, BuildVariant(context))
+    buildDir = os.path.join(context.buildDir, os.path.split(srcDir)[1])
 
-    buildDir = context.buildDir
-    Print(buildDir)
-    
     if force and os.path.isdir(buildDir):
         shutil.rmtree(buildDir)
 
@@ -301,16 +298,20 @@ def InstallExplore3MF(context, force, buildArgs):
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter)
 
-parser.add_argument("install_dir", type=str,
-                    help="Directory where project will be installed")
+parser.add_argument("workspace_location", type=str,
+                    help="Directory where the project use as a workspace to build and install plugin/libraries.")
 
 parser.add_argument("--generator", type=str,
                     help=("CMake generator to use when building libraries with "
                           "cmake"))
 
-parser.add_argument("--build_dir", type=str,
-                    help=("Build directory for project"
-                          "(default: <install_dir>/build_dir)"))
+parser.add_argument("--build-location", type=str,
+                    help=("Set Build directory"
+                          "(default: <workspace_location>/build-location)"))
+
+parser.add_argument("--install-location", type=str,
+                    help=("Set Install directory"
+                          "(default: <workspace_location>/install-location)"))
 
 parser.add_argument("--build-debug", dest="build_debug", action="store_true",
                     help="Build in Debug mode")
@@ -345,12 +346,16 @@ class InstallContext:
         self.srcDir = os.path.normpath(
             os.path.join(os.path.abspath(os.path.dirname(__file__))))
 
-        # Directory where plugins and libraries  will be installed
-        self.installDir = os.path.abspath(args.install_dir)
+        # Workspace directory 
+        self.workspaceDir = os.path.abspath(args.workspace_location)
 
-        # Directory where plugins and libraries will be built
-        self.buildDir = (os.path.abspath(args.build_dir) if args.build_dir
-                         else os.path.join(self.installDir, "build"))
+        # Build directory
+        self.buildDir = (os.path.abspath(args.build_location) if args.build_location
+                         else os.path.join(self.workspaceDir, "build"))
+
+        # Install directory
+        self.instDir = (os.path.abspath(args.install_location) if args.install_location
+                         else os.path.join(self.workspaceDir, "install"))
 
         # Build type
         self.buildDebug = args.build_debug
@@ -387,8 +392,9 @@ except Exception as e:
 summaryMsg = """
 Building with settings:
   Source directory          {srcDir}
-  Install directory         {installDir}
+  Workspace directory       {workspaceDir}
   Build directory           {buildDir}
+  Install directory         {instDir}
   Variant                   {buildVariant}
   CMake generator           {cmakeGenerator}
   Build Log                 {logFileName}"""
@@ -399,8 +405,9 @@ if context.buildArgs:
 
 summaryMsg = summaryMsg.format(
     srcDir=context.srcDir,
-    installDir=context.installDir,
+    workspaceDir=context.workspaceDir,
     buildDir=context.buildDir,
+    instDir=context.instDir,
     logFileName=os.path.join(context.buildDir,context.logFileName),
     buildArgs=context.buildArgs,
     buildVariant=BuildVariant(context),

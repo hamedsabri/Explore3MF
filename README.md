@@ -16,11 +16,12 @@ Code repository of Youtube tutorial videos on using 3D Manufacturing Format (3MF
 
 The simplest way to build the project is by running the ```build.py``` script.
 ```
-usage: build.py [-h] [--generator GENERATOR] [--build_dir BUILD_DIR]
-                [--build-debug] [--build-release] [--build-relwithdebug]
+usage: build.py [-h] [--generator GENERATOR] [--build-location BUILD_LOCATION]
+                [--install-location INSTALL_LOCATION] [--build-debug]
+                [--build-release] [--build-relwithdebug]
                 [--build-args [BUILD_ARGS [BUILD_ARGS ...]]] [-j JOBS]
                 [--force FORCE_CLEAN_BUILD]
-                install_dir
+                workspace_location
 ```
 ###### 1. Install prerequisites
 
@@ -35,7 +36,7 @@ usage: build.py [-h] [--generator GENERATOR] [--build_dir BUILD_DIR]
   - Ninja
 
 ###### 2. Build location
-By default the build directory is created in the install_dir but the location can change to where ever you want by setting the ```--build_dir``` flag.
+By default the build directory is created in the workspace_location but the location can change to where ever you want by setting the ```--build-location``` flag.
 
 ###### 3. Build Log
 Build log ```log.txt``` is generated inside the build directory.
