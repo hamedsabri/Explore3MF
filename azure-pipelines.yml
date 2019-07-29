@@ -30,7 +30,7 @@ jobs:
         addToPath: true
       displayName: Use python2.7!
 
-    - script: python build.py $(Variant) --build_dir $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
+    - script: python build.py $(Variant) --build-location $(BuildFolder) --generator $(CMakeArgs) $(InstallFolder)
       displayName: 'Run build script!'
       
     - script: 'ctest -j 4 --output-on-failure -C $(BuildType) -VV'
