@@ -31,7 +31,7 @@ if(WIN32)
     add_definitions(-D_GLFW_WIN32)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 
-    file(GLOB GLFW_SOURCES
+    file(GLOB GLFW_source
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/018ab722/src/context.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/018ab722/src/egl_context.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/018ab722/src/init.c
@@ -57,7 +57,7 @@ if(WIN32)
 elseif(APPLE)
     add_definitions(-D_GLFW_COCOA)
 
-    file(GLOB GLFW_SOURCES
+    file(GLOB GLFW_source
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/018ab722/src/context.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/018ab722/src/egl_context.c
         ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/018ab722/src/init.c
@@ -82,7 +82,7 @@ elseif(APPLE)
     )
 endif()
 
-file(GLOB INCLUDES
+file(GLOB includes
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/018ab722/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glm/02c4d8b1/*.hpp
@@ -91,11 +91,11 @@ file(GLOB INCLUDES
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/STBImage/e6afb9cb/*.h
 )
 
-file(GLOB SOURCES 
+file(GLOB source 
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/src/*.c
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/ImGui/d4cd121a/*.cpp
     ${NATIVE_FILE_DIALOG}
-    ${GLFW_SOURCES}
+    ${GLFW_source}
 )
 
 if (APPLE)
@@ -112,7 +112,11 @@ endif()
 # ---------------------------------------------------------------------------------
 # thirdPartyLibs                                                                  
 # ---------------------------------------------------------------------------------
-add_library(thirdPartyLibs STATIC ${SOURCES} ${INCLUDES})
+add_library(thirdPartyLibs STATIC 
+    ${source} 
+    ${includes}
+)
+
 target_include_directories(thirdPartyLibs PRIVATE include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glad/include
     ${EXTERNAL_LIBRARIES_DIRECTORY_PATH}/Glfw/018ab722/include
