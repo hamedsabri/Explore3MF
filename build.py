@@ -421,7 +421,7 @@ Print(summaryMsg)
 InstallExplore3MF(context, context.forceBuild, context.buildArgs)
 
 # Ensure directory structure is created and is writable.
-for dir in [context.installDir, context.buildDir]:
+for dir in [context.instDir, context.buildDir]:
     try:
         if os.path.isdir(dir):
             testFile = os.path.join(dir, "canwrite")
