@@ -228,8 +228,8 @@ def RunCMake(context, force, extraArgs=None):
     # Create a directory for out-of-source builds in the build directory
     # using the name of the current working directory.
     srcDir = os.getcwd()
-    instDir = os.path.join(context.instDir, BuildVariant(context))
-    buildDir = os.path.join(context.buildDir, os.path.split(srcDir)[1])
+    instDir = context.instDir
+    buildDir = context.buildDir
 
     if force and os.path.isdir(buildDir):
         shutil.rmtree(buildDir)
