@@ -5,6 +5,7 @@ jobs:
 - job:
   displayName: Windows
   pool:
+    name: sabrihAgent
     vmImage: 'vs2017-win2016'
 
   strategy:
